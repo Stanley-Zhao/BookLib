@@ -1,0 +1,316 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="BookLibDB.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="BookLibDBStoreContainer">
+    <EntitySet Name="Users" EntityType="BookLibDB.Store.Users" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Books" EntityType="BookLibDB.Store.Books" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="BookTypes" EntityType="BookLibDB.Store.BookTypes" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Status" EntityType="BookLibDB.Store.Status" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Histories" EntityType="BookLibDB.Store.Histories" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="StatusBook" Association="BookLibDB.Store.StatusBook">
+      <End Role="Status" EntitySet="Status" />
+      <End Role="Book" EntitySet="Books" />
+    </AssociationSet>
+    <AssociationSet Name="BookTypeBook" Association="BookLibDB.Store.BookTypeBook">
+      <End Role="BookType" EntitySet="BookTypes" />
+      <End Role="Book" EntitySet="Books" />
+    </AssociationSet>
+    <AssociationSet Name="BookHistory" Association="BookLibDB.Store.BookHistory">
+      <End Role="Book" EntitySet="Books" />
+      <End Role="History" EntitySet="Histories" />
+    </AssociationSet>
+    <AssociationSet Name="UserHistory" Association="BookLibDB.Store.UserHistory">
+      <End Role="User" EntitySet="Users" />
+      <End Role="History" EntitySet="Histories" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Users">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Email" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Books">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="TypeID" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Status_Id" Type="int" Nullable="false" />
+    <Property Name="BookType_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="BookTypes">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Status">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Histories">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="StartTime" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="ReturnTime" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Book_Id" Type="int" Nullable="false" />
+    <Property Name="User_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="StatusBook">
+    <End Role="Status" Type="BookLibDB.Store.Status" Multiplicity="1" />
+    <End Role="Book" Type="BookLibDB.Store.Books" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Status">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Book">
+        <PropertyRef Name="Status_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="BookTypeBook">
+    <End Role="BookType" Type="BookLibDB.Store.BookTypes" Multiplicity="1" />
+    <End Role="Book" Type="BookLibDB.Store.Books" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BookType">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Book">
+        <PropertyRef Name="BookType_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="BookHistory">
+    <End Role="Book" Type="BookLibDB.Store.Books" Multiplicity="1" />
+    <End Role="History" Type="BookLibDB.Store.Histories" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Book">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="History">
+        <PropertyRef Name="Book_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="UserHistory">
+    <End Role="User" Type="BookLibDB.Store.Users" Multiplicity="1" />
+    <End Role="History" Type="BookLibDB.Store.Histories" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="History">
+        <PropertyRef Name="User_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="BookLibDB" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+        <EntityContainer Name="BookLibDBContainer" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Users" EntityType="BookLibDB.User" />
+          <EntitySet Name="Books" EntityType="BookLibDB.Book" />
+          <EntitySet Name="BookTypes" EntityType="BookLibDB.BookType" />
+          <EntitySet Name="Status" EntityType="BookLibDB.Status" />
+          <EntitySet Name="Histories" EntityType="BookLibDB.History" />
+          <AssociationSet Name="StatusBook" Association="BookLibDB.StatusBook">
+            <End Role="Status" EntitySet="Status" />
+            <End Role="Book" EntitySet="Books" />
+          </AssociationSet>
+          <AssociationSet Name="BookTypeBook" Association="BookLibDB.BookTypeBook">
+            <End Role="BookType" EntitySet="BookTypes" />
+            <End Role="Book" EntitySet="Books" />
+          </AssociationSet>
+          <AssociationSet Name="BookHistory" Association="BookLibDB.BookHistory">
+            <End Role="Book" EntitySet="Books" />
+            <End Role="History" EntitySet="Histories" />
+          </AssociationSet>
+          <AssociationSet Name="UserHistory" Association="BookLibDB.UserHistory">
+            <End Role="User" EntitySet="Users" />
+            <End Role="History" EntitySet="Histories" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <Property Name="Email" Type="String" Nullable="false" />
+          <NavigationProperty Name="Histories" Relationship="BookLibDB.UserHistory" FromRole="User" ToRole="History" />
+        </EntityType>
+        <EntityType Name="Book">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <Property Name="TypeID" Type="String" Nullable="false" />
+          <NavigationProperty Name="Status" Relationship="BookLibDB.StatusBook" FromRole="Book" ToRole="Status" />
+          <NavigationProperty Name="BookType" Relationship="BookLibDB.BookTypeBook" FromRole="Book" ToRole="BookType" />
+          <NavigationProperty Name="Histories" Relationship="BookLibDB.BookHistory" FromRole="Book" ToRole="History" />
+          <Property Name="Description" Type="String" Nullable="false" />
+        </EntityType>
+        <EntityType Name="BookType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <NavigationProperty Name="Books" Relationship="BookLibDB.BookTypeBook" FromRole="BookType" ToRole="Book" />
+        </EntityType>
+        <EntityType Name="Status">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <NavigationProperty Name="Books" Relationship="BookLibDB.StatusBook" FromRole="Status" ToRole="Book" />
+        </EntityType>
+        <EntityType Name="History">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StartTime" Type="String" Nullable="false" />
+          <Property Name="ReturnTime" Type="String" Nullable="false" />
+          <NavigationProperty Name="Book" Relationship="BookLibDB.BookHistory" FromRole="History" ToRole="Book" />
+          <NavigationProperty Name="User" Relationship="BookLibDB.UserHistory" FromRole="History" ToRole="User" />
+        </EntityType>
+        <Association Name="StatusBook">
+          <End Type="BookLibDB.Status" Role="Status" Multiplicity="1" />
+          <End Type="BookLibDB.Book" Role="Book" Multiplicity="*" />
+        </Association>
+        <Association Name="BookTypeBook">
+          <End Type="BookLibDB.BookType" Role="BookType" Multiplicity="1" />
+          <End Type="BookLibDB.Book" Role="Book" Multiplicity="*" />
+        </Association>
+        <Association Name="BookHistory">
+          <End Type="BookLibDB.Book" Role="Book" Multiplicity="1" />
+          <End Type="BookLibDB.History" Role="History" Multiplicity="*" />
+        </Association>
+        <Association Name="UserHistory">
+          <End Type="BookLibDB.User" Role="User" Multiplicity="1" />
+          <End Type="BookLibDB.History" Role="History" Multiplicity="*" />
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="BookLibDBStoreContainer" CdmEntityContainer="BookLibDBContainer">
+    <EntitySetMapping Name="Users">
+      <EntityTypeMapping TypeName="IsTypeOf(BookLibDB.User)">
+        <MappingFragment StoreEntitySet="Users">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Books">
+      <EntityTypeMapping TypeName="IsTypeOf(BookLibDB.Book)">
+        <MappingFragment StoreEntitySet="Books">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="TypeID" ColumnName="TypeID" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="BookTypes">
+      <EntityTypeMapping TypeName="IsTypeOf(BookLibDB.BookType)">
+        <MappingFragment StoreEntitySet="BookTypes">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Status">
+      <EntityTypeMapping TypeName="IsTypeOf(BookLibDB.Status)">
+        <MappingFragment StoreEntitySet="Status">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Histories">
+      <EntityTypeMapping TypeName="IsTypeOf(BookLibDB.History)">
+        <MappingFragment StoreEntitySet="Histories">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+          <ScalarProperty Name="ReturnTime" ColumnName="ReturnTime" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="StatusBook" TypeName="BookLibDB.StatusBook" StoreEntitySet="Books">
+      <EndProperty Name="Status">
+        <ScalarProperty Name="Id" ColumnName="Status_Id" />
+      </EndProperty>
+      <EndProperty Name="Book">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="BookTypeBook" TypeName="BookLibDB.BookTypeBook" StoreEntitySet="Books">
+      <EndProperty Name="BookType">
+        <ScalarProperty Name="Id" ColumnName="BookType_Id" />
+      </EndProperty>
+      <EndProperty Name="Book">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="BookHistory" TypeName="BookLibDB.BookHistory" StoreEntitySet="Histories">
+      <EndProperty Name="Book">
+        <ScalarProperty Name="Id" ColumnName="Book_Id" />
+      </EndProperty>
+      <EndProperty Name="History">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="UserHistory" TypeName="BookLibDB.UserHistory" StoreEntitySet="Histories">
+      <EndProperty Name="User">
+        <ScalarProperty Name="Id" ColumnName="User_Id" />
+      </EndProperty>
+      <EndProperty Name="History">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <edmx:Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="无" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
+      </DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
