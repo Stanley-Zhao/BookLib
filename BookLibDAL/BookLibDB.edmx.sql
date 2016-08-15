@@ -12,14 +12,14 @@ SET QUOTED_IDENTIFIER OFF;
 GO
 USE [BookLibDb];
 GO
-IF SCHEMA_ID(N'BL') IS NULL EXECUTE(N'CREATE SCHEMA [BL]');
+IF SCHEMA_ID(N'dbo') IS NULL EXECUTE(N'CREATE SCHEMA [dbo]');
 GO
 
 -- --------------------------------------------------
 -- Dropping existing FOREIGN KEY constraints
 -- --------------------------------------------------
-IF OBJECT_ID('[BL].[Books]', 'U') IS NOT NULL
-ALTER TABLE [BL].[Books]
+IF OBJECT_ID('[dbo].[Books]', 'U') IS NOT NULL
+ALTER TABLE [dbo].[Books]
 DROP CONSTRAINT [FK_BookTypeBook],
 CONSTRAINT [FK_StatusBook]
 GO
@@ -27,31 +27,31 @@ GO
 -- --------------------------------------------------
 -- Dropping existing tables
 -- --------------------------------------------------
-IF OBJECT_ID('[BL].[BookTypes]', 'U') IS NOT NULL
-DROP TABLE [BL].[BookTypes]
+IF OBJECT_ID('[dbo].[BookTypes]', 'U') IS NOT NULL
+DROP TABLE [dbo].[BookTypes]
 GO
 
-IF OBJECT_ID('[BL].[Status]', 'U') IS NOT NULL
-DROP TABLE [BL].[Status]
+IF OBJECT_ID('[dbo].[Status]', 'U') IS NOT NULL
+DROP TABLE [dbo].[Status]
 GO
 
-IF OBJECT_ID('[BL].[Histories]', 'U') IS NOT NULL
-DROP TABLE [BL].[Histories]
+IF OBJECT_ID('[dbo].[Histories]', 'U') IS NOT NULL
+DROP TABLE [dbo].[Histories]
 GO
 
-IF OBJECT_ID('[BL].[Users]', 'U') IS NOT NULL
-DROP TABLE [BL].[Users]
+IF OBJECT_ID('[dbo].[Users]', 'U') IS NOT NULL
+DROP TABLE [dbo].[Users]
 GO
 
-IF OBJECT_ID('[BL].[Books]', 'U') IS NOT NULL
-DROP TABLE [BL].[Books]
+IF OBJECT_ID('[dbo].[Books]', 'U') IS NOT NULL
+DROP TABLE [dbo].[Books]
 GO
 -- --------------------------------------------------
 -- Creating all tables
 -- --------------------------------------------------
 
 -- Creating table 'Users'
-CREATE TABLE [BL].[Users] (
+CREATE TABLE [dbo].[Users] (
     [Id] int IDENTITY(1,1) NOT NULL,
     [Name] nvarchar(max)  NOT NULL,
     [Email] nvarchar(max)  NOT NULL
@@ -59,7 +59,7 @@ CREATE TABLE [BL].[Users] (
 GO
 
 -- Creating table 'Books'
-CREATE TABLE [BL].[Books] (
+CREATE TABLE [dbo].[Books] (
     [Id] int IDENTITY(1,1) NOT NULL,
     [Name] nvarchar(max)  NOT NULL,
     [TypeID] nvarchar(max)  NOT NULL,
@@ -70,21 +70,21 @@ CREATE TABLE [BL].[Books] (
 GO
 
 -- Creating table 'BookTypes'
-CREATE TABLE [BL].[BookTypes] (
+CREATE TABLE [dbo].[BookTypes] (
     [Id] int IDENTITY(1,1) NOT NULL,
     [Name] nvarchar(max)  NOT NULL
 );
 GO
 
 -- Creating table 'Status'
-CREATE TABLE [BL].[Status] (
+CREATE TABLE [dbo].[Status] (
     [Id] int IDENTITY(1,1) NOT NULL,
     [Name] nvarchar(max)  NOT NULL
 );
 GO
 
 -- Creating table 'Histories'
-CREATE TABLE [BL].[Histories] (
+CREATE TABLE [dbo].[Histories] (
     [Id] int IDENTITY(1,1) NOT NULL,
     [StartTime] nvarchar(max)  NOT NULL,
     [ReturnTime] nvarchar(max)  NOT NULL,
@@ -98,31 +98,31 @@ GO
 -- --------------------------------------------------
 
 -- Creating primary key on [Id] in table 'Users'
-ALTER TABLE [BL].[Users]
+ALTER TABLE [dbo].[Users]
 ADD CONSTRAINT [PK_Users]
     PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
 -- Creating primary key on [Id] in table 'Books'
-ALTER TABLE [BL].[Books]
+ALTER TABLE [dbo].[Books]
 ADD CONSTRAINT [PK_Books]
     PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
 -- Creating primary key on [Id] in table 'BookTypes'
-ALTER TABLE [BL].[BookTypes]
+ALTER TABLE [dbo].[BookTypes]
 ADD CONSTRAINT [PK_BookTypes]
     PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
 -- Creating primary key on [Id] in table 'Status'
-ALTER TABLE [BL].[Status]
+ALTER TABLE [dbo].[Status]
 ADD CONSTRAINT [PK_Status]
     PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
 -- Creating primary key on [Id] in table 'Histories'
-ALTER TABLE [BL].[Histories]
+ALTER TABLE [dbo].[Histories]
 ADD CONSTRAINT [PK_Histories]
     PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
@@ -132,75 +132,75 @@ GO
 -- --------------------------------------------------
 
 -- Creating foreign key on [Status_Id] in table 'Books'
-ALTER TABLE [BL].[Books]
+ALTER TABLE [dbo].[Books]
 ADD CONSTRAINT [FK_StatusBook]
     FOREIGN KEY ([Status_Id])
-    REFERENCES [BL].[Status]
+    REFERENCES [dbo].[Status]
         ([Id])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
 GO
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_StatusBook'
 CREATE INDEX [IX_FK_StatusBook]
-ON [BL].[Books]
+ON [dbo].[Books]
     ([Status_Id]);
 GO
 
 -- Creating foreign key on [BookType_Id] in table 'Books'
-ALTER TABLE [BL].[Books]
+ALTER TABLE [dbo].[Books]
 ADD CONSTRAINT [FK_BookTypeBook]
     FOREIGN KEY ([BookType_Id])
-    REFERENCES [BL].[BookTypes]
+    REFERENCES [dbo].[BookTypes]
         ([Id])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
 GO
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_BookTypeBook'
 CREATE INDEX [IX_FK_BookTypeBook]
-ON [BL].[Books]
+ON [dbo].[Books]
     ([BookType_Id]);
 GO
 
 -- Creating foreign key on [Book_Id] in table 'Histories'
-ALTER TABLE [BL].[Histories]
+ALTER TABLE [dbo].[Histories]
 ADD CONSTRAINT [FK_BookHistory]
     FOREIGN KEY ([Book_Id])
-    REFERENCES [BL].[Books]
+    REFERENCES [dbo].[Books]
         ([Id])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
 GO
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_BookHistory'
 CREATE INDEX [IX_FK_BookHistory]
-ON [BL].[Histories]
+ON [dbo].[Histories]
     ([Book_Id]);
 GO
 
 -- Creating foreign key on [User_Id] in table 'Histories'
-ALTER TABLE [BL].[Histories]
+ALTER TABLE [dbo].[Histories]
 ADD CONSTRAINT [FK_UserHistory]
     FOREIGN KEY ([User_Id])
-    REFERENCES [BL].[Users]
+    REFERENCES [dbo].[Users]
         ([Id])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
 GO
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_UserHistory'
 CREATE INDEX [IX_FK_UserHistory]
-ON [BL].[Histories]
+ON [dbo].[Histories]
     ([User_Id]);
 GO
 
 -- Seeding data into database
 -- BookTypes
-INSERT INTO BL.BookTypes (Name) VALUES (N'Program')
-INSERT INTO BL.BookTypes (Name) VALUES (N'English')
-INSERT INTO BL.BookTypes (Name) VALUES (N'Management')
+INSERT INTO dbo.BookTypes (Name) VALUES (N'English')
+INSERT INTO dbo.BookTypes (Name) VALUES (N'Management')
+INSERT INTO dbo.BookTypes (Name) VALUES (N'Program')
 GO
 
 -- Status
-INSERT INTO BL.Status(Name) VALUES (N'Ready')
-INSERT INTO BL.Status(Name) VALUES (N'Lending')
+INSERT INTO dbo.Status(Name) VALUES (N'Lending')
+INSERT INTO dbo.Status(Name) VALUES (N'Ready')
 GO
 
 -- --------------------------------------------------
