@@ -3,3 +3,10 @@
 ################################################################################
 
 /.vs/BookLib/v14/.suo
+/BookLibDAL.UnitTest/obj/Release
+/BookLibDAL.UnitTest/bin/Release
+/packages
+/SimpleTest/obj/Release
+/SimpleTest/bin/Release
+/BookLibDAL/obj/Release
+/BookLibDAL/bin/Release
