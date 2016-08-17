@@ -10,3 +10,5 @@
 /SimpleTest/bin/Release
 /BookLibDAL/obj/Release
 /BookLibDAL/bin/Release
+/BookLibDAL.UnitTest/obj
+/BookLibDAL.UnitTest/bin
