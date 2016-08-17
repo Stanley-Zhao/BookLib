@@ -42,7 +42,6 @@
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="TypeID" Type="nvarchar(max)" Nullable="false" />
     <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
     <Property Name="Status_Id" Type="int" Nullable="false" />
     <Property Name="BookType_Id" Type="int" Nullable="false" />
@@ -66,8 +65,8 @@
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="StartTime" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="ReturnTime" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="StartTime" Type="time" Nullable="false" />
+    <Property Name="ReturnTime" Type="time" Nullable="false" />
     <Property Name="Book_Id" Type="int" Nullable="false" />
     <Property Name="User_Id" Type="int" Nullable="false" />
   </EntityType>
@@ -151,8 +150,8 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" />
-          <Property Name="Email" Type="String" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" FixedLength="false" />
+          <Property Name="Email" Type="String" Nullable="false" FixedLength="false" />
           <NavigationProperty Name="Histories" Relationship="BookLibDB.UserHistory" FromRole="User" ToRole="History" />
         </EntityType>
         <EntityType Name="Book">
@@ -160,8 +159,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" />
-          <Property Name="TypeID" Type="String" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" FixedLength="false" />
           <NavigationProperty Name="Status" Relationship="BookLibDB.StatusBook" FromRole="Book" ToRole="Status" />
           <NavigationProperty Name="BookType" Relationship="BookLibDB.BookTypeBook" FromRole="Book" ToRole="BookType" />
           <NavigationProperty Name="Histories" Relationship="BookLibDB.BookHistory" FromRole="Book" ToRole="History" />
@@ -172,7 +170,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" FixedLength="false" />
           <NavigationProperty Name="Books" Relationship="BookLibDB.BookTypeBook" FromRole="BookType" ToRole="Book" />
         </EntityType>
         <EntityType Name="Status">
@@ -180,7 +178,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" annotation:StoreGeneratedPattern="None" FixedLength="false" />
           <NavigationProperty Name="Books" Relationship="BookLibDB.StatusBook" FromRole="Status" ToRole="Book" />
         </EntityType>
         <EntityType Name="History">
@@ -188,8 +186,8 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="StartTime" Type="String" Nullable="false" />
-          <Property Name="ReturnTime" Type="String" Nullable="false" />
+          <Property Name="StartTime" Type="Time" Nullable="false" />
+          <Property Name="ReturnTime" Type="Time" Nullable="false" />
           <NavigationProperty Name="Book" Relationship="BookLibDB.BookHistory" FromRole="History" ToRole="Book" />
           <NavigationProperty Name="User" Relationship="BookLibDB.UserHistory" FromRole="History" ToRole="User" />
         </EntityType>
@@ -229,7 +227,6 @@
         <MappingFragment StoreEntitySet="Books">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Name" ColumnName="Name" />
-          <ScalarProperty Name="TypeID" ColumnName="TypeID" />
           <ScalarProperty Name="Description" ColumnName="Description" />
         </MappingFragment>
       </EntityTypeMapping>

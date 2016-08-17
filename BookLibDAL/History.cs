@@ -15,8 +15,8 @@ namespace BookLibDAL
     public partial class History
     {
         public int Id { get; set; }
-        public string StartTime { get; set; }
-        public string ReturnTime { get; set; }
+        public System.TimeSpan StartTime { get; set; }
+        public System.TimeSpan ReturnTime { get; set; }
     
         public virtual Book Book { get; set; }
         public virtual User User { get; set; }

@@ -1,10 +1,8 @@
-USE BookLibDb
-GO
 
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 08/09/2016 17:55:04
+-- Date Created: 08/17/2016 12:01:29
 -- Generated from EDMX file: D:\Workspace\VS2015\BookLib\BookLibDAL\BookLibDB.edmx
 -- --------------------------------------------------
 
@@ -18,34 +16,40 @@ GO
 -- --------------------------------------------------
 -- Dropping existing FOREIGN KEY constraints
 -- --------------------------------------------------
-IF OBJECT_ID('[dbo].[Books]', 'U') IS NOT NULL
-ALTER TABLE [dbo].[Books]
-DROP CONSTRAINT [FK_BookTypeBook],
-CONSTRAINT [FK_StatusBook]
+
+IF OBJECT_ID(N'[dbo].[FK_StatusBook]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Books] DROP CONSTRAINT [FK_StatusBook];
+GO
+IF OBJECT_ID(N'[dbo].[FK_BookTypeBook]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Books] DROP CONSTRAINT [FK_BookTypeBook];
+GO
+IF OBJECT_ID(N'[dbo].[FK_BookHistory]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Histories] DROP CONSTRAINT [FK_BookHistory];
+GO
+IF OBJECT_ID(N'[dbo].[FK_UserHistory]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Histories] DROP CONSTRAINT [FK_UserHistory];
 GO
 
 -- --------------------------------------------------
 -- Dropping existing tables
 -- --------------------------------------------------
-IF OBJECT_ID('[dbo].[BookTypes]', 'U') IS NOT NULL
-DROP TABLE [dbo].[BookTypes]
+
+IF OBJECT_ID(N'[dbo].[Users]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Users];
+GO
+IF OBJECT_ID(N'[dbo].[Books]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Books];
+GO
+IF OBJECT_ID(N'[dbo].[BookTypes]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[BookTypes];
+GO
+IF OBJECT_ID(N'[dbo].[Status]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Status];
+GO
+IF OBJECT_ID(N'[dbo].[Histories]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Histories];
 GO
 
-IF OBJECT_ID('[dbo].[Status]', 'U') IS NOT NULL
-DROP TABLE [dbo].[Status]
-GO
-
-IF OBJECT_ID('[dbo].[Histories]', 'U') IS NOT NULL
-DROP TABLE [dbo].[Histories]
-GO
-
-IF OBJECT_ID('[dbo].[Users]', 'U') IS NOT NULL
-DROP TABLE [dbo].[Users]
-GO
-
-IF OBJECT_ID('[dbo].[Books]', 'U') IS NOT NULL
-DROP TABLE [dbo].[Books]
-GO
 -- --------------------------------------------------
 -- Creating all tables
 -- --------------------------------------------------
@@ -54,15 +58,14 @@ GO
 CREATE TABLE [dbo].[Users] (
     [Id] int IDENTITY(1,1) NOT NULL,
     [Name] nvarchar(max)  NOT NULL,
-    [Email] nvarchar(max)  NOT NULL
+    [Email] nvarchar(72)  NOT NULL
 );
 GO
 
 -- Creating table 'Books'
 CREATE TABLE [dbo].[Books] (
     [Id] int IDENTITY(1,1) NOT NULL,
-    [Name] nvarchar(max)  NOT NULL,
-    [TypeID] nvarchar(max)  NOT NULL,
+    [Name] nvarchar(72)  NOT NULL,
     [Description] nvarchar(max)  NOT NULL,
     [Status_Id] int  NOT NULL,
     [BookType_Id] int  NOT NULL
@@ -72,22 +75,22 @@ GO
 -- Creating table 'BookTypes'
 CREATE TABLE [dbo].[BookTypes] (
     [Id] int IDENTITY(1,1) NOT NULL,
-    [Name] nvarchar(max)  NOT NULL
+    [Name] nvarchar(72)  NOT NULL
 );
 GO
 
 -- Creating table 'Status'
 CREATE TABLE [dbo].[Status] (
     [Id] int IDENTITY(1,1) NOT NULL,
-    [Name] nvarchar(max)  NOT NULL
+    [Name] nvarchar(72)  NOT NULL
 );
 GO
 
 -- Creating table 'Histories'
 CREATE TABLE [dbo].[Histories] (
     [Id] int IDENTITY(1,1) NOT NULL,
-    [StartTime] nvarchar(max)  NOT NULL,
-    [ReturnTime] nvarchar(max)  NOT NULL,
+    [StartTime] time  NOT NULL,
+    [ReturnTime] time  NOT NULL,
     [Book_Id] int  NOT NULL,
     [User_Id] int  NOT NULL
 );
@@ -191,7 +194,37 @@ ON [dbo].[Histories]
     ([User_Id]);
 GO
 
+-- --------------------------------------------------
+-- Creating all UNIQUE NONCLUSTERED constraints
+-- --------------------------------------------------
+
+-- Creating unique column on [Email] in table 'Users'
+ALTER TABLE [dbo].[Users]
+ADD CONSTRAINT [UNIQUE_EMAIL] 
+	UNIQUE NONCLUSTERED ([Email] ASC);
+GO
+
+-- Creating unique column on [Name] in table 'Books'
+ALTER TABLE [dbo].[Books]
+ADD CONSTRAINT [UNIQUE_BOOKNAME] 
+	UNIQUE NONCLUSTERED ([Name]);
+GO
+
+-- Creating unique column on [Name] in table 'BookTypes'
+ALTER TABLE [dbo].[BookTypes]
+ADD CONSTRAINT [UNIQUE_BOOKTYPENAME] 
+	UNIQUE NONCLUSTERED ([Name]);
+GO
+
+-- Creating unique column on [Name] in table 'Status'
+ALTER TABLE [dbo].[Status]
+ADD CONSTRAINT [UNIQUE_STATUSNAME] 
+	UNIQUE NONCLUSTERED ([Name]);
+GO
+
+-- --------------------------------------------------
 -- Seeding data into database
+-- --------------------------------------------------
 -- BookTypes
 INSERT INTO dbo.BookTypes (Name) VALUES (N'English')
 INSERT INTO dbo.BookTypes (Name) VALUES (N'Management')
