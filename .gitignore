@@ -12,3 +12,10 @@
 /BookLibDAL/bin/Release
 /BookLibDAL.UnitTest/obj
 /BookLibDAL.UnitTest/bin
+/BookLibDAL/obj/Debug/*.pdb
+/BookLibDAL/bin/Debug/*.dll
+/BookLibDAL/bin/Debug/zh-Hans/*.dll
+/SimpleTest/bin/Debug
+/BookLibDAL/bin/Debug
+/BookLibDAL/obj/Debug
+/SimpleTest/obj/Debug

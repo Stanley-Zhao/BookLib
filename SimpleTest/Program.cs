@@ -7,6 +7,24 @@ using System.Linq;
 
 namespace SimpleTest
 {
+    public class A
+    {
+        public string ClassName { get; set; } = nameof(A);
+
+        public string PrintName()
+        {
+            return ClassName;
+        }
+    }
+
+    public class B : A
+    {
+        public B()
+        {
+            ClassName = nameof(B);
+        }
+    }
+
     class Program
     {
         static void Main(string[] args)
@@ -37,9 +55,8 @@ namespace SimpleTest
                     //int savedItems = container.SaveChanges();
                     #endregion
 
-                    #region Test Read Single
-
-                    #endregion
+                    B b = new B();
+                    Console.WriteLine(b.PrintName());
                 }
                 catch (DbUpdateException ex)
                 {

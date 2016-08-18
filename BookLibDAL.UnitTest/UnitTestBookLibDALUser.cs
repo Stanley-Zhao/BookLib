@@ -1,45 +1,21 @@
 ﻿using System;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Data.Entity.Infrastructure;
 
 namespace BookLibDAL.UnitTest
 {
     [TestClass]
-    public class UnitTestBookLibDALUser
+    public class UnitTestBookLibDALUser : UnitTestBase
     {
-        #region Members and Setup / Teardown
-        private static TestContext tc = null;
-
-        /// <summary>
-        /// Nothing special in Initialization for now.
-        /// </summary>
-        /// <param name="pTestContext"></param>
-        [ClassInitialize]
-        public static void TestStartUp(TestContext pTestContext)
-        {
-            tc = pTestContext;
-            Console.WriteLine("Start UnitTestBookLibUser");
-        }
-
-        /// <summary>
-        /// Nothing special in Initialization for now.
-        /// </summary>
-        /// <param name="pTestContext"></param>
-        [ClassCleanup]
-        public static void TestTearDown()
-        {
-            // No code here
-        }
-        #endregion
-
         #region Test - User (Test: Create / Read / Update and Delete -> CRUD)
         /// <summary>
-        /// Create a new user in system (user1)
+        /// Create a new user in system (user1, test@advent_test.com)
         /// </summary>
         [TestMethod]
         public void TestCreateUser()
         {
-            Console.WriteLine("Run TestCreateUser()");
+            StartTest(nameof(TestCreateUser).ToString());
 
             using (BookLibDAL.BookLibDBContainer container = new BookLibDAL.BookLibDBContainer())
             {
@@ -64,7 +40,47 @@ namespace BookLibDAL.UnitTest
                 }
             }
 
-            Console.WriteLine("Done of TestCreateUser()");
+            EndTest(nameof(TestCreateUser).ToString());
+        }
+
+        /// <summary>
+        /// Create a new user in system (user2, test@advent_test.com), this time, there will be an error from DB say user email is not allowed to be duplicated.
+        /// </summary>
+        [TestMethod]
+        public void TestCreateDuplicateUser()
+        {
+            StartTest(nameof(TestCreateDuplicateUser).ToString());
+
+            using (BookLibDAL.BookLibDBContainer container = new BookLibDAL.BookLibDBContainer())
+            {
+                try
+                {
+                    var usersList = from c in container.Users
+                                    orderby c.Id
+                                    select new { c.Id, c.Name, c.Email };
+
+                    Assert.AreEqual(0, usersList.Count());
+
+                    User newUser = new User() { Name = "user2", Email = "test@advent_test.com", Histories = null };
+
+                    container.Users.Add(newUser);
+                    int savedItemsCount = container.SaveChanges();
+
+                    if (savedItemsCount == 1)
+                    {
+                        Assert.Fail("Supposed to get exception from Database but not");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    if(!(ex is DbUpdateException))
+                    {
+                        Assert.Fail("Supposed to get DbUpdateException from Database but not");
+                    }
+                }
+            }
+
+            EndTest(nameof(TestCreateDuplicateUser).ToString());
         }
 
         /// <summary>
@@ -73,7 +89,7 @@ namespace BookLibDAL.UnitTest
         [TestMethod]
         public void TestReadUser()
         {
-            Console.WriteLine("Run TestReadUser()");
+            StartTest(nameof(TestReadUser).ToString());
 
             using (BookLibDAL.BookLibDBContainer container = new BookLibDAL.BookLibDBContainer())
             {
@@ -90,7 +106,7 @@ namespace BookLibDAL.UnitTest
                 Assert.AreEqual("test@advent_test.com", users[0].Email);
             }
 
-            Console.WriteLine("Run TestReadUser()");
+            EndTest(nameof(TestReadUser).ToString());
         }
 
         /// <summary>
@@ -99,7 +115,7 @@ namespace BookLibDAL.UnitTest
         [TestMethod]
         public void TestUpdateUser()
         {
-            Console.WriteLine("Run TestUpdateUser()");
+            StartTest(nameof(TestUpdateUser).ToString());
 
             using (BookLibDAL.BookLibDBContainer container = new BookLibDAL.BookLibDBContainer())
             {
@@ -115,7 +131,7 @@ namespace BookLibDAL.UnitTest
                 Assert.AreEqual(1, updatedItemsCount);
             }
 
-            Console.WriteLine("Done of TestUpdateUser()");
+            EndTest(nameof(TestUpdateUser).ToString());
         }
 
         /// <summary>
@@ -124,7 +140,7 @@ namespace BookLibDAL.UnitTest
         [TestMethod]
         public void TestDeleteUser()
         {
-            Console.WriteLine("Run TestDeleteUser()");
+            StartTest(nameof(TestDeleteUser).ToString());
 
             using (BookLibDAL.BookLibDBContainer container = new BookLibDAL.BookLibDBContainer())
             {
@@ -147,7 +163,7 @@ namespace BookLibDAL.UnitTest
                 Assert.AreEqual(0, userLists.Count());
             }
 
-            Console.WriteLine("Done of TestDeleteUser()");
+            EndTest(nameof(TestDeleteUser).ToString());
         }
         #endregion
     }

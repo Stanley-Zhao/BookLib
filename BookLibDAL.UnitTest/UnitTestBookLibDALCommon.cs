@@ -5,33 +5,8 @@ using System.Linq;
 namespace BookLibDAL.UnitTest
 {
 	[TestClass]
-	public class UnitTestBookLibDALCommon
+	public class UnitTestBookLibDALCommon : UnitTestBase
 	{
-		#region Members and Setup / Teardown
-		private static TestContext tc = null;
-
-		/// <summary>
-		/// Nothing special in Initialization for now.
-		/// </summary>
-		/// <param name="pTestContext"></param>
-		[ClassInitialize]
-		public static void TestStartUp(TestContext pTestContext)
-		{
-			tc = pTestContext;
-			Console.WriteLine("Start UnitTestBookLibCommon");
-		}
-
-        /// <summary>
-        /// Nothing special in Initialization for now.
-        /// </summary>
-        /// <param name="pTestContext"></param>
-        [ClassCleanup]
-        public static void TestTearDown()
-        {
-            // No code here
-        }
-        #endregion
-
         #region Test - Status (Test: Read)
         /// <summary>
         /// We only need read, this is a "ready-only" data in system
@@ -39,9 +14,9 @@ namespace BookLibDAL.UnitTest
         [TestMethod]
 		public void TestReadStatus()
 		{
-			Console.WriteLine("Run TestReadStatus()");
+            StartTest(nameof(TestReadStatus).ToString());
 
-			using (BookLibDAL.BookLibDBContainer container = new BookLibDAL.BookLibDBContainer())
+            using (BookLibDAL.BookLibDBContainer container = new BookLibDAL.BookLibDBContainer())
 			{
 				var statusList = from c in container.Status
 								 orderby c.Name
@@ -55,8 +30,8 @@ namespace BookLibDAL.UnitTest
 				Assert.AreEqual("Ready", statuses[1].Name);
 			}
 
-			Console.WriteLine("Done of TestReadStatus()");
-		}
+            EndTest(nameof(TestReadStatus).ToString());
+        }
 		#endregion
 
 		#region Test - BookType (Test: Read)
@@ -66,9 +41,9 @@ namespace BookLibDAL.UnitTest
 		[TestMethod]
 		public void TestReadBookType()
 		{
-			Console.WriteLine("Run TestReadBookType()");
+            StartTest(nameof(TestReadBookType).ToString());
 
-			using (BookLibDAL.BookLibDBContainer container = new BookLibDAL.BookLibDBContainer())
+            using (BookLibDAL.BookLibDBContainer container = new BookLibDAL.BookLibDBContainer())
 			{
 				var bookTypeList = from c in container.BookTypes
 								 orderby c.Name
@@ -83,8 +58,8 @@ namespace BookLibDAL.UnitTest
 				Assert.AreEqual("Program", bookTypes[2].Name);
 			}
 
-			Console.WriteLine("Done of TestReadBookType()");
-		}
+            EndTest(nameof(TestReadBookType).ToString());
+        }
 		#endregion
 	}
 }
