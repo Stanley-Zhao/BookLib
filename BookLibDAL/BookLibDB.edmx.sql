@@ -2,9 +2,10 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 08/18/2016 20:01:28
+-- Date Created: 08/18/2016 22:06:36
 -- Generated from EDMX file: D:\Workspace\VS2015\BookLib\BookLibDAL\BookLibDB.edmx
 -- --------------------------------------------------
+
 USE master
 GO
 
@@ -35,6 +36,9 @@ GO
 IF OBJECT_ID(N'[dbo].[FK_UserHistory]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[Histories] DROP CONSTRAINT [FK_UserHistory];
 GO
+IF OBJECT_ID(N'[dbo].[FK_RoleUser]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Users] DROP CONSTRAINT [FK_RoleUser];
+GO
 
 -- --------------------------------------------------
 -- Dropping existing tables
@@ -55,6 +59,9 @@ GO
 IF OBJECT_ID(N'[dbo].[Histories]', 'U') IS NOT NULL
     DROP TABLE [dbo].[Histories];
 GO
+IF OBJECT_ID(N'[dbo].[Roles]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Roles];
+GO
 
 -- --------------------------------------------------
 -- Creating all tables
@@ -64,7 +71,8 @@ GO
 CREATE TABLE [dbo].[Users] (
     [Id] int IDENTITY(1,1) NOT NULL,
     [Name] nvarchar(72)  NOT NULL,
-    [Email] nvarchar(72)  NOT NULL
+    [Email] nvarchar(72)  NOT NULL,
+    [RoleId] int  NOT NULL
 );
 GO
 
@@ -102,6 +110,13 @@ CREATE TABLE [dbo].[Histories] (
 );
 GO
 
+-- Creating table 'Roles'
+CREATE TABLE [dbo].[Roles] (
+    [Id] int IDENTITY(1,1) NOT NULL,
+    [Name] nvarchar(72)  NOT NULL
+);
+GO
+
 -- --------------------------------------------------
 -- Creating all PRIMARY KEY constraints
 -- --------------------------------------------------
@@ -133,6 +148,12 @@ GO
 -- Creating primary key on [Id] in table 'Histories'
 ALTER TABLE [dbo].[Histories]
 ADD CONSTRAINT [PK_Histories]
+    PRIMARY KEY CLUSTERED ([Id] ASC);
+GO
+
+-- Creating primary key on [Id] in table 'Roles'
+ALTER TABLE [dbo].[Roles]
+ADD CONSTRAINT [PK_Roles]
     PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
@@ -200,6 +221,55 @@ ON [dbo].[Histories]
     ([UserId]);
 GO
 
+-- Creating foreign key on [RoleId] in table 'Users'
+ALTER TABLE [dbo].[Users]
+ADD CONSTRAINT [FK_RoleUser]
+    FOREIGN KEY ([RoleId])
+    REFERENCES [dbo].[Roles]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_RoleUser'
+CREATE INDEX [IX_FK_RoleUser]
+ON [dbo].[Users]
+    ([RoleId]);
+GO
+
+-- --------------------------------------------------
+-- Creating all UNIQUE NONCLUSTERED constraints
+-- --------------------------------------------------
+
+-- Creating unique column on [Email] in table 'Users'
+ALTER TABLE [dbo].[Users]
+ADD CONSTRAINT [UNIQUE_EMAIL] 
+	UNIQUE NONCLUSTERED ([Email] ASC);
+GO
+
+-- Creating unique column on [Name] in table 'Books'
+ALTER TABLE [dbo].[Books]
+ADD CONSTRAINT [UNIQUE_BOOKNAME] 
+	UNIQUE NONCLUSTERED ([Name]);
+GO
+
+-- Creating unique column on [Name] in table 'BookTypes'
+ALTER TABLE [dbo].[BookTypes]
+ADD CONSTRAINT [UNIQUE_BOOKTYPENAME] 
+	UNIQUE NONCLUSTERED ([Name]);
+GO
+
+-- Creating unique column on [Name] in table 'Status'
+ALTER TABLE [dbo].[Status]
+ADD CONSTRAINT [UNIQUE_STATUSNAME] 
+	UNIQUE NONCLUSTERED ([Name]);
+GO
+
+-- Creating unique column on [Name] in table 'Roles'
+ALTER TABLE [dbo].[Roles]
+ADD CONSTRAINT [UNIQUE_ROLE] 
+	UNIQUE NONCLUSTERED ([Name] ASC);
+GO
+
 -- --------------------------------------------------
 -- Seeding data into database
 -- --------------------------------------------------
@@ -212,6 +282,15 @@ GO
 -- Status
 INSERT INTO dbo.Status(Name) VALUES (N'Lending')
 INSERT INTO dbo.Status(Name) VALUES (N'Ready')
+GO
+
+-- Role
+INSERT INTO dbo.Roles(Name) VALUES (N'Admin')
+INSERT INTO dbo.Roles(Name) VALUES (N'User')
+GO
+
+-- User for root admin
+INSERT INTO dbo.Users(Name, Email, RoleId) VALUES (N'Susi Su', N'susi.su@advent.com', 1)
 GO
 
 -- --------------------------------------------------

@@ -9,6 +9,17 @@ namespace BookLibDAL.UnitTest
     [TestClass]
     public class UnitTestBookLibDALUser : UnitTestBase
     {
+        #region Help Methods
+        private static void RemoveDirtyData()
+        {
+            using (BookLibDBContainer container = new BookLibDBContainer())
+            {
+                container.Users.RemoveRange(container.Users.Where(x => x.Id > 1).ToList());
+                container.SaveChanges();
+            }
+        }
+        #endregion
+
         #region TearDown for testing method
         /// <summary>
         /// Clean up testing data in db.
@@ -18,14 +29,20 @@ namespace BookLibDAL.UnitTest
         {
             RemoveTestingData remove = () =>
             {
-                using (BookLibDBContainer container = new BookLibDBContainer())
-                {
-                    container.Books.RemoveRange(container.Books);
-                    container.SaveChanges();
-                }
+                RemoveDirtyData();
             };
 
             DoCleanUp(remove);
+        }
+
+        /// <summary>
+        /// Clean up environment before run test
+        /// </summary>
+        /// <param name="pTC"></param>
+        [TestInitialize]
+        public void BeforeTesting()
+        {
+            RemoveDirtyData();
         }
         #endregion
 
@@ -46,7 +63,7 @@ namespace BookLibDAL.UnitTest
                                     orderby c.Id
                                     select new { c.Id, c.Name, c.Email };
 
-                    Assert.AreEqual(0, usersList.Count());
+                    Assert.AreEqual(1, usersList.Count()); // there's a root admin user in DB as seed data
                     int savedItemsCount = CreateUser(container);
 
                     Assert.AreEqual(1, savedItemsCount);
@@ -79,9 +96,9 @@ namespace BookLibDAL.UnitTest
                                     orderby c.Id
                                     select new { c.Id, c.Name, c.Email };
 
-                    Assert.AreEqual(1, usersList.Count());
+                    Assert.AreEqual(2, usersList.Count());
 
-                    User newUser = new User() { Name = "user2", Email = "test@advent_test.com"};
+                    User newUser = new User() { Name = "user1", Email = "test@advent_test.com"};
 
                     container.Users.Add(newUser);
                     int savedItemsCount = container.SaveChanges();
@@ -120,12 +137,12 @@ namespace BookLibDAL.UnitTest
                                 orderby c.Id
                                 select new { c.Id, c.Name, c.Email };
 
-                Assert.AreEqual(1, usersList.Count());
+                Assert.AreEqual(2, usersList.Count()); // there's a root admin user in DB as seed data, so here is 2
 
                 var users = usersList.ToList();
 
-                Assert.AreEqual("user1", users[0].Name);
-                Assert.AreEqual("test@advent_test.com", users[0].Email);
+                Assert.AreEqual("user1", users[1].Name);
+                Assert.AreEqual("test@advent_test.com", users[1].Email);
             }
 
             EndTest(nameof(TestReadUser).ToString());
@@ -188,7 +205,7 @@ namespace BookLibDAL.UnitTest
                                  orderby c.Id
                                  select new { c.Id, c.Name, c.Email });
 
-                Assert.AreEqual(0, userLists.Count());
+                Assert.AreEqual(1, userLists.Count());
             }
 
             EndTest(nameof(TestDeleteUser).ToString());

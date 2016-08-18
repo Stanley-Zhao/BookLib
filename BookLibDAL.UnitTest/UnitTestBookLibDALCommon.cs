@@ -60,6 +60,33 @@ namespace BookLibDAL.UnitTest
 
             EndTest(nameof(TestReadBookType).ToString());
         }
-		#endregion
-	}
+        #endregion
+
+        #region Test - Role (Test: Read)
+        /// <summary>
+		/// We only need read, this is a "ready-only" data in system
+		/// </summary>
+		[TestMethod]
+        public void TestReadRole()
+        {
+            StartTest(nameof(TestReadRole).ToString());
+
+            using (BookLibDAL.BookLibDBContainer container = new BookLibDAL.BookLibDBContainer())
+            {
+                var roleList = from c in container.Roles
+                                   orderby c.Name
+                                   select new { c.Id, c.Name };
+
+                Assert.AreEqual(2, roleList.Count());
+
+                var bookTypes = roleList.ToList();
+
+                Assert.AreEqual("Admin", bookTypes[0].Name);
+                Assert.AreEqual("User", bookTypes[1].Name);
+            }
+
+            EndTest(nameof(TestReadRole).ToString());
+        }
+        #endregion
+    }
 }

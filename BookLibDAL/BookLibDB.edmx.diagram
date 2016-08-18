@@ -14,7 +14,7 @@
         <AssociationConnector Association="BookLibDB.BookTypeBook" />
         <AssociationConnector Association="BookLibDB.BookHistory" />
         <AssociationConnector Association="BookLibDB.UserHistory" />
-        <EntityTypeShape EntityType="BookLibDB.Role" Width="1.5" PointX="9.5" PointY="1.5" FillColor="255, 128, 128" />
+        <EntityTypeShape EntityType="BookLibDB.Role" Width="1.5" PointX="9.375" PointY="1.625" FillColor="255, 192, 192" />
         <AssociationConnector Association="BookLibDB.RoleUser" />
       </Diagram>
     </edmx:Diagrams>

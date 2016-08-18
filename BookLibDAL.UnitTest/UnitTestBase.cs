@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,9 @@ namespace BookLibDAL.UnitTest
     public class UnitTestBase
     {
         #region Hard-code strings
+        protected string Role_Admin { get; } = "Admin";
+        protected string Role_User { get; } = "User";
+
         protected string Status_Lending { get; } = "Lending";
         protected string Status_Ready { get; } = "Ready";
 
@@ -36,6 +40,7 @@ namespace BookLibDAL.UnitTest
         protected void Error(string error)
         {
             Log(string.Format("\r\n** Error - {0}\r\n", error));
+            Assert.Fail(error);
         }
 
         private void Log(string log)
@@ -79,16 +84,37 @@ namespace BookLibDAL.UnitTest
             }
         }
 
+        protected Role GetRole(string name)
+        {
+            using (BookLibDBContainer container = new BookLibDBContainer())
+            {
+                Role role = container.Roles.Where(x => x.Name == name).FirstOrDefault() as Role;
+
+                if (null != role)
+                {
+                    return role;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+
         // user1, test@advent_test.com
         protected int CreateUser(BookLibDBContainer container)
         {
             try
             {
-                User newUser = new User() { Name = "user1", Email = "test@advent_test.com" };
+                Role role = GetRole(Role_User);
+                User newUser = new User() { Name = "user1", Email = "test@advent_test.com", RoleId = role.Id};
 
                 container.Users.Add(newUser);
                 int savedItemsCount = container.SaveChanges();
-                Info("create testing user - user1");
+
+                User savedUser = container.Users.Where(x => x.Name == "user1").FirstOrDefault() as User;
+
+                Info(string.Format("Create testing user:\r\n{0}", savedUser.ToString()));
                 return savedItemsCount;
             }
             catch(Exception ex)
@@ -104,12 +130,15 @@ namespace BookLibDAL.UnitTest
         {
             CreateUser(container);
 
+            Status status = GetStatus(Status_Ready);
+            BookType bookType = GetBookType(BookType_Program);
+
             Book newBook = new Book()
             {
                 Name = "book1",
                 Description = "This is a testing book",
-                StatusId = GetStatus(Status_Ready).Id,
-                BookTypeId = GetBookType(BookType_Program).Id,
+                StatusId = status.Id,
+                BookTypeId = bookType.Id,
                 Histories = new List<BookLibDAL.History>() {
                     new History()
                     {
@@ -122,7 +151,10 @@ namespace BookLibDAL.UnitTest
 
             container.Books.Add(newBook);
             int savedItemsCount = container.SaveChanges();
-            Info("create testing book - book1");
+
+            Book savedBook = container.Books.Where(x => x.Name == "book1").FirstOrDefault() as Book;
+
+            Info(string.Format("Create testing book:\r\n{0}", savedBook.ToString()));
             return savedItemsCount;
         }
         #endregion
@@ -142,10 +174,16 @@ namespace BookLibDAL.UnitTest
             {
                 if (null != cleanup)
                 {
-#if !DEBUG
+//#if !DEBUG
+                    // remove all histories first, other wise we cannot remove users or books because of FK
+                    using (BookLibDBContainer container = new BookLibDBContainer())
+                    {
+                        container.Histories.RemoveRange(container.Histories);
+                        container.SaveChanges();
+                    }
+
                     cleanup.DynamicInvoke();
-#endif
-                    throw new Exception("testing");
+//#endif
                     Info("Teardown - cleanup");
                 }
             }

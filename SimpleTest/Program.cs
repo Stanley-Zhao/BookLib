@@ -26,6 +26,12 @@ namespace SimpleTest
                     }
 
                     Console.WriteLine(bookList.Count());
+
+                    var userList = container.Users.Where(x => x.Id > 1).ToList();
+                    foreach (var item2 in userList)
+                    {
+                        Console.WriteLine(item2.ToString());
+                    }
                     #endregion
 
                     #region Test Write

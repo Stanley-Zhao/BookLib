@@ -1,6 +1,6 @@
 ﻿namespace BookLibDAL
 {
-    public partial class Status
+    public partial class Role
     {
         public override string ToString()
         {

@@ -11,15 +11,16 @@ namespace BookLibDAL
             builder.AppendFormat("ID\t{0}\r\n", Id.ToString());
             builder.AppendFormat("Name\t{0}\r\n", Name);
             builder.AppendFormat("Des.\t{0}\r\n", Description);
-            builder.AppendFormat("Status\t{0}\r\n", Status.Name);
-            builder.AppendFormat("Type\t{0}\r\n", BookType.Name);
-            builder.AppendFormat("Hist.\t({0}):\r\n", Histories.Count.ToString());
+            builder.AppendFormat("Status\t{0}\r\n", Status?.Name);
+            builder.AppendFormat("Type\t{0}\r\n", BookType?.Name);
+            builder.AppendFormat("Hist.\t({0}):\r\n", Histories?.Count.ToString());
             builder.AppendLine("----");
             foreach (History history in Histories)
             {
-                builder.AppendFormat("  Start - {0} | End - {1} | By {2}/{3}\r\n",
+                builder.AppendFormat("  Start - {0} | End - {1} | By {2}/{3}/{4}\r\n",
                     history.StartTime.ToString(ConstantStrings.DATE_FORMAT),
                     history.ReturnTime.ToString(ConstantStrings.DATE_FORMAT),
+                    history.User.Role.Name,
                     history.User.Name,
                     history.User.Email
                     );

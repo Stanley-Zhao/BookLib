@@ -11,6 +11,7 @@
     <EntitySet Name="BookTypes" EntityType="BookLibDB.Store.BookTypes" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Status" EntityType="BookLibDB.Store.Status" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Histories" EntityType="BookLibDB.Store.Histories" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Roles" EntityType="BookLibDB.Store.Roles" store:Type="Tables" Schema="dbo" />
     <AssociationSet Name="StatusBook" Association="BookLibDB.Store.StatusBook">
       <End Role="Status" EntitySet="Status" />
       <End Role="Book" EntitySet="Books" />
@@ -27,6 +28,10 @@
       <End Role="User" EntitySet="Users" />
       <End Role="History" EntitySet="Histories" />
     </AssociationSet>
+    <AssociationSet Name="RoleUser" Association="BookLibDB.Store.RoleUser">
+      <End Role="Role" EntitySet="Roles" />
+      <End Role="User" EntitySet="Users" />
+    </AssociationSet>
   </EntityContainer>
   <EntityType Name="Users">
     <Key>
@@ -35,6 +40,7 @@
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
     <Property Name="Email" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="RoleId" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="Books">
     <Key>
@@ -69,6 +75,13 @@
     <Property Name="ReturnTime" Type="datetime" Nullable="false" />
     <Property Name="UserId" Type="int" Nullable="false" />
     <Property Name="BookId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Roles">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
   </EntityType>
   <Association Name="StatusBook">
     <End Role="Status" Type="BookLibDB.Store.Status" Multiplicity="1" />
@@ -118,6 +131,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="RoleUser">
+    <End Role="Role" Type="BookLibDB.Store.Roles" Multiplicity="1" />
+    <End Role="User" Type="BookLibDB.Store.Users" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Role">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="User">
+        <PropertyRef Name="RoleId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -157,9 +182,9 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" FixedLength="false" />
           <Property Name="Email" Type="String" Nullable="false" FixedLength="false" />
-		  <Property Name="RoleId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Histories" Relationship="BookLibDB.UserHistory" FromRole="User" ToRole="History" />
-          <NavigationProperty Name="Role" Relationship="BookLibDB.RoleUser" FromRole="User" ToRole="Role" />          
+          <NavigationProperty Name="Role" Relationship="BookLibDB.RoleUser" FromRole="User" ToRole="Role" />
+          <Property Name="RoleId" Type="Int32" Nullable="false" />          
         </EntityType>
         <EntityType Name="Book">
           <Key>
@@ -282,6 +307,7 @@
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Name" ColumnName="Name" />
           <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="RoleId" ColumnName="RoleId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -320,6 +346,14 @@
           <ScalarProperty Name="ReturnTime" ColumnName="ReturnTime" />
           <ScalarProperty Name="UserId" ColumnName="UserId" />
           <ScalarProperty Name="BookId" ColumnName="BookId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Roles">
+      <EntityTypeMapping TypeName="IsTypeOf(BookLibDB.Role)">
+        <MappingFragment StoreEntitySet="Roles">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

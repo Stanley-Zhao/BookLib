@@ -7,6 +7,23 @@ namespace BookLibDAL.UnitTest
     [TestClass]
     public class UnitTestBookLibDALBook : UnitTestBase
     {
+        #region Help Methods
+        private static void RemoveDirtyData()
+        {
+            using (BookLibDBContainer container = new BookLibDBContainer())
+            {
+                container.Histories.RemoveRange(container.Histories);
+                container.SaveChanges();
+            }
+
+            using (BookLibDBContainer container = new BookLibDBContainer())
+            {
+                container.Users.RemoveRange(container.Users.Where(x => x.Id > 1).ToList());
+                container.SaveChanges();
+            }
+        }
+        #endregion
+
         #region TearDown for testing method
         /// <summary>
         /// Clean up testing data in db.
@@ -24,6 +41,16 @@ namespace BookLibDAL.UnitTest
             };
 
             DoCleanUp(remove);
+        }
+
+        /// <summary>
+        /// Clean up environment before run test
+        /// </summary>
+        /// <param name="pTC"></param>
+        [TestInitialize]
+        public void BeforeTesting()
+        {
+            RemoveDirtyData();
         }
         #endregion
 
