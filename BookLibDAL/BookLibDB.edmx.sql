@@ -2,9 +2,15 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 08/17/2016 12:01:29
+-- Date Created: 08/18/2016 20:01:28
 -- Generated from EDMX file: D:\Workspace\VS2015\BookLib\BookLibDAL\BookLibDB.edmx
 -- --------------------------------------------------
+USE master
+GO
+
+IF NOT EXISTS (SELECT name FROM sys.databases d WHERE d.name = 'BookLibDb')
+CREATE DATABASE BookLibDb
+GO
 
 SET QUOTED_IDENTIFIER OFF;
 GO
@@ -57,7 +63,7 @@ GO
 -- Creating table 'Users'
 CREATE TABLE [dbo].[Users] (
     [Id] int IDENTITY(1,1) NOT NULL,
-    [Name] nvarchar(max)  NOT NULL,
+    [Name] nvarchar(72)  NOT NULL,
     [Email] nvarchar(72)  NOT NULL
 );
 GO
@@ -66,9 +72,9 @@ GO
 CREATE TABLE [dbo].[Books] (
     [Id] int IDENTITY(1,1) NOT NULL,
     [Name] nvarchar(72)  NOT NULL,
-    [Description] nvarchar(max)  NOT NULL,
-    [Status_Id] int  NOT NULL,
-    [BookType_Id] int  NOT NULL
+    [Description] nvarchar(512)  NOT NULL,
+    [StatusId] int  NOT NULL,
+    [BookTypeId] int  NOT NULL
 );
 GO
 
@@ -89,10 +95,10 @@ GO
 -- Creating table 'Histories'
 CREATE TABLE [dbo].[Histories] (
     [Id] int IDENTITY(1,1) NOT NULL,
-    [StartTime] time  NOT NULL,
-    [ReturnTime] time  NOT NULL,
-    [Book_Id] int  NOT NULL,
-    [User_Id] int  NOT NULL
+    [StartTime] datetime  NOT NULL,
+    [ReturnTime] datetime  NOT NULL,
+    [UserId] int  NOT NULL,
+    [BookId] int  NOT NULL
 );
 GO
 
@@ -134,10 +140,10 @@ GO
 -- Creating all FOREIGN KEY constraints
 -- --------------------------------------------------
 
--- Creating foreign key on [Status_Id] in table 'Books'
+-- Creating foreign key on [StatusId] in table 'Books'
 ALTER TABLE [dbo].[Books]
 ADD CONSTRAINT [FK_StatusBook]
-    FOREIGN KEY ([Status_Id])
+    FOREIGN KEY ([StatusId])
     REFERENCES [dbo].[Status]
         ([Id])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
@@ -146,13 +152,13 @@ GO
 -- Creating non-clustered index for FOREIGN KEY 'FK_StatusBook'
 CREATE INDEX [IX_FK_StatusBook]
 ON [dbo].[Books]
-    ([Status_Id]);
+    ([StatusId]);
 GO
 
--- Creating foreign key on [BookType_Id] in table 'Books'
+-- Creating foreign key on [BookTypeId] in table 'Books'
 ALTER TABLE [dbo].[Books]
 ADD CONSTRAINT [FK_BookTypeBook]
-    FOREIGN KEY ([BookType_Id])
+    FOREIGN KEY ([BookTypeId])
     REFERENCES [dbo].[BookTypes]
         ([Id])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
@@ -161,13 +167,13 @@ GO
 -- Creating non-clustered index for FOREIGN KEY 'FK_BookTypeBook'
 CREATE INDEX [IX_FK_BookTypeBook]
 ON [dbo].[Books]
-    ([BookType_Id]);
+    ([BookTypeId]);
 GO
 
--- Creating foreign key on [Book_Id] in table 'Histories'
+-- Creating foreign key on [BookId] in table 'Histories'
 ALTER TABLE [dbo].[Histories]
 ADD CONSTRAINT [FK_BookHistory]
-    FOREIGN KEY ([Book_Id])
+    FOREIGN KEY ([BookId])
     REFERENCES [dbo].[Books]
         ([Id])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
@@ -176,13 +182,13 @@ GO
 -- Creating non-clustered index for FOREIGN KEY 'FK_BookHistory'
 CREATE INDEX [IX_FK_BookHistory]
 ON [dbo].[Histories]
-    ([Book_Id]);
+    ([BookId]);
 GO
 
--- Creating foreign key on [User_Id] in table 'Histories'
+-- Creating foreign key on [UserId] in table 'Histories'
 ALTER TABLE [dbo].[Histories]
 ADD CONSTRAINT [FK_UserHistory]
-    FOREIGN KEY ([User_Id])
+    FOREIGN KEY ([UserId])
     REFERENCES [dbo].[Users]
         ([Id])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
@@ -191,35 +197,7 @@ GO
 -- Creating non-clustered index for FOREIGN KEY 'FK_UserHistory'
 CREATE INDEX [IX_FK_UserHistory]
 ON [dbo].[Histories]
-    ([User_Id]);
-GO
-
--- --------------------------------------------------
--- Creating all UNIQUE NONCLUSTERED constraints
--- --------------------------------------------------
-
--- Creating unique column on [Email] in table 'Users'
-ALTER TABLE [dbo].[Users]
-ADD CONSTRAINT [UNIQUE_EMAIL] 
-	UNIQUE NONCLUSTERED ([Email] ASC);
-GO
-
--- Creating unique column on [Name] in table 'Books'
-ALTER TABLE [dbo].[Books]
-ADD CONSTRAINT [UNIQUE_BOOKNAME] 
-	UNIQUE NONCLUSTERED ([Name]);
-GO
-
--- Creating unique column on [Name] in table 'BookTypes'
-ALTER TABLE [dbo].[BookTypes]
-ADD CONSTRAINT [UNIQUE_BOOKTYPENAME] 
-	UNIQUE NONCLUSTERED ([Name]);
-GO
-
--- Creating unique column on [Name] in table 'Status'
-ALTER TABLE [dbo].[Status]
-ADD CONSTRAINT [UNIQUE_STATUSNAME] 
-	UNIQUE NONCLUSTERED ([Name]);
+    ([UserId]);
 GO
 
 -- --------------------------------------------------

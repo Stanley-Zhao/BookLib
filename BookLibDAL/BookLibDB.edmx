@@ -43,8 +43,8 @@
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
     <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="Status_Id" Type="int" Nullable="false" />
-    <Property Name="BookType_Id" Type="int" Nullable="false" />
+    <Property Name="StatusId" Type="int" Nullable="false" />
+    <Property Name="BookTypeId" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="BookTypes">
     <Key>
@@ -65,10 +65,10 @@
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="StartTime" Type="time" Nullable="false" />
-    <Property Name="ReturnTime" Type="time" Nullable="false" />
-    <Property Name="Book_Id" Type="int" Nullable="false" />
-    <Property Name="User_Id" Type="int" Nullable="false" />
+    <Property Name="StartTime" Type="datetime" Nullable="false" />
+    <Property Name="ReturnTime" Type="datetime" Nullable="false" />
+    <Property Name="UserId" Type="int" Nullable="false" />
+    <Property Name="BookId" Type="int" Nullable="false" />
   </EntityType>
   <Association Name="StatusBook">
     <End Role="Status" Type="BookLibDB.Store.Status" Multiplicity="1" />
@@ -78,7 +78,7 @@
         <PropertyRef Name="Id" />
       </Principal>
       <Dependent Role="Book">
-        <PropertyRef Name="Status_Id" />
+        <PropertyRef Name="StatusId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -90,7 +90,7 @@
         <PropertyRef Name="Id" />
       </Principal>
       <Dependent Role="Book">
-        <PropertyRef Name="BookType_Id" />
+        <PropertyRef Name="BookTypeId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -102,7 +102,7 @@
         <PropertyRef Name="Id" />
       </Principal>
       <Dependent Role="History">
-        <PropertyRef Name="Book_Id" />
+        <PropertyRef Name="BookId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -114,7 +114,7 @@
         <PropertyRef Name="Id" />
       </Principal>
       <Dependent Role="History">
-        <PropertyRef Name="User_Id" />
+        <PropertyRef Name="UserId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -144,6 +144,11 @@
             <End Role="User" EntitySet="Users" />
             <End Role="History" EntitySet="Histories" />
           </AssociationSet>
+          <EntitySet Name="Roles" EntityType="BookLibDB.Role" />
+          <AssociationSet Name="RoleUser" Association="BookLibDB.RoleUser">
+            <End Role="Role" EntitySet="Roles" />
+            <End Role="User" EntitySet="Users" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="User">
           <Key>
@@ -152,7 +157,9 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" FixedLength="false" />
           <Property Name="Email" Type="String" Nullable="false" FixedLength="false" />
+		  <Property Name="RoleId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Histories" Relationship="BookLibDB.UserHistory" FromRole="User" ToRole="History" />
+          <NavigationProperty Name="Role" Relationship="BookLibDB.RoleUser" FromRole="User" ToRole="Role" />          
         </EntityType>
         <EntityType Name="Book">
           <Key>
@@ -160,10 +167,12 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" FixedLength="false" />
+          <Property Name="Description" Type="String" Nullable="false" />
+          <Property Name="StatusId" Type="Int32" Nullable="false" />
+          <Property Name="BookTypeId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Histories" Relationship="BookLibDB.BookHistory" FromRole="Book" ToRole="History" />
           <NavigationProperty Name="Status" Relationship="BookLibDB.StatusBook" FromRole="Book" ToRole="Status" />
           <NavigationProperty Name="BookType" Relationship="BookLibDB.BookTypeBook" FromRole="Book" ToRole="BookType" />
-          <NavigationProperty Name="Histories" Relationship="BookLibDB.BookHistory" FromRole="Book" ToRole="History" />
-          <Property Name="Description" Type="String" Nullable="false" />
         </EntityType>
         <EntityType Name="BookType">
           <Key>
@@ -186,26 +195,80 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="StartTime" Type="Time" Nullable="false" />
-          <Property Name="ReturnTime" Type="Time" Nullable="false" />
-          <NavigationProperty Name="Book" Relationship="BookLibDB.BookHistory" FromRole="History" ToRole="Book" />
+          <Property Name="StartTime" Type="DateTime" Nullable="false" />
+          <Property Name="ReturnTime" Type="DateTime" Nullable="false" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="BookId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="User" Relationship="BookLibDB.UserHistory" FromRole="History" ToRole="User" />
+          <NavigationProperty Name="Book" Relationship="BookLibDB.BookHistory" FromRole="History" ToRole="Book" />
         </EntityType>
         <Association Name="StatusBook">
           <End Type="BookLibDB.Status" Role="Status" Multiplicity="1" />
           <End Type="BookLibDB.Book" Role="Book" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Status">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Book">
+              <PropertyRef Name="StatusId" />
+            </Dependent>
+          </ReferentialConstraint>
         </Association>
         <Association Name="BookTypeBook">
           <End Type="BookLibDB.BookType" Role="BookType" Multiplicity="1" />
           <End Type="BookLibDB.Book" Role="Book" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BookType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Book">
+              <PropertyRef Name="BookTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
         </Association>
         <Association Name="BookHistory">
           <End Type="BookLibDB.Book" Role="Book" Multiplicity="1" />
           <End Type="BookLibDB.History" Role="History" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Book">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="History">
+              <PropertyRef Name="BookId" />
+            </Dependent>
+          </ReferentialConstraint>
         </Association>
         <Association Name="UserHistory">
           <End Type="BookLibDB.User" Role="User" Multiplicity="1" />
           <End Type="BookLibDB.History" Role="History" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="History">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <NavigationProperty Name="Users" Relationship="BookLibDB.RoleUser" FromRole="Role" ToRole="User" />
+        </EntityType>
+        <Association Name="RoleUser">
+          <End Type="BookLibDB.Role" Role="Role" Multiplicity="1" />
+          <End Type="BookLibDB.User" Role="User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
         </Association>
       </Schema>
     </edmx:ConceptualModels>
@@ -228,6 +291,8 @@
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Name" ColumnName="Name" />
           <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="StatusId" ColumnName="StatusId" />
+          <ScalarProperty Name="BookTypeId" ColumnName="BookTypeId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -253,41 +318,11 @@
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="StartTime" ColumnName="StartTime" />
           <ScalarProperty Name="ReturnTime" ColumnName="ReturnTime" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="BookId" ColumnName="BookId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <AssociationSetMapping Name="StatusBook" TypeName="BookLibDB.StatusBook" StoreEntitySet="Books">
-      <EndProperty Name="Status">
-        <ScalarProperty Name="Id" ColumnName="Status_Id" />
-      </EndProperty>
-      <EndProperty Name="Book">
-        <ScalarProperty Name="Id" ColumnName="Id" />
-      </EndProperty>
-    </AssociationSetMapping>
-    <AssociationSetMapping Name="BookTypeBook" TypeName="BookLibDB.BookTypeBook" StoreEntitySet="Books">
-      <EndProperty Name="BookType">
-        <ScalarProperty Name="Id" ColumnName="BookType_Id" />
-      </EndProperty>
-      <EndProperty Name="Book">
-        <ScalarProperty Name="Id" ColumnName="Id" />
-      </EndProperty>
-    </AssociationSetMapping>
-    <AssociationSetMapping Name="BookHistory" TypeName="BookLibDB.BookHistory" StoreEntitySet="Histories">
-      <EndProperty Name="Book">
-        <ScalarProperty Name="Id" ColumnName="Book_Id" />
-      </EndProperty>
-      <EndProperty Name="History">
-        <ScalarProperty Name="Id" ColumnName="Id" />
-      </EndProperty>
-    </AssociationSetMapping>
-    <AssociationSetMapping Name="UserHistory" TypeName="BookLibDB.UserHistory" StoreEntitySet="Histories">
-      <EndProperty Name="User">
-        <ScalarProperty Name="Id" ColumnName="User_Id" />
-      </EndProperty>
-      <EndProperty Name="History">
-        <ScalarProperty Name="Id" ColumnName="Id" />
-      </EndProperty>
-    </AssociationSetMapping>
   </EntityContainerMapping>
 </Mapping></edmx:Mappings>
   </edmx:Runtime>

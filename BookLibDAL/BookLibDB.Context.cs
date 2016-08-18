@@ -30,5 +30,6 @@ namespace BookLibDAL
         public virtual DbSet<BookType> BookTypes { get; set; }
         public virtual DbSet<Status> Status { get; set; }
         public virtual DbSet<History> Histories { get; set; }
+        public virtual DbSet<Role> Roles { get; set; }
     }
 }

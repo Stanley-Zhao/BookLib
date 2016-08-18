@@ -12,15 +12,18 @@ namespace BookLibDAL
     using System;
     using System.Collections.Generic;
     
-    public partial class History
+    public partial class Role
     {
-        public int Id { get; set; }
-        public System.DateTime StartTime { get; set; }
-        public System.DateTime ReturnTime { get; set; }
-        public int UserId { get; set; }
-        public int BookId { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Role()
+        {
+            this.Users = new HashSet<User>();
+        }
     
-        public virtual User User { get; set; }
-        public virtual Book Book { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<User> Users { get; set; }
     }
 }

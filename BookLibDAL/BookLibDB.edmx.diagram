@@ -5,15 +5,17 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="fd710293df42444e9afb09ef6e086fed" Name="Diagram" >
-        <EntityTypeShape EntityType="BookLibDB.User" Width="1.5" PointX="3" PointY="5.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="BookLibDB.Book" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="BookLibDB.BookType" Width="1.5" PointX="0.75" PointY="5.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="BookLibDB.Status" Width="1.5" PointX="0.75" PointY="1.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="BookLibDB.History" Width="1.5" PointX="5.25" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="BookLibDB.User" Width="1.5" PointX="7.25" PointY="1.375" IsExpanded="true" FillColor="Maroon" />
+        <EntityTypeShape EntityType="BookLibDB.Book" Width="1.5" PointX="2.75" PointY="1.125" IsExpanded="true" FillColor="Green" />
+        <EntityTypeShape EntityType="BookLibDB.BookType" Width="1.5" PointX="0.5" PointY="3" IsExpanded="true" FillColor="192, 255, 192" />
+        <EntityTypeShape EntityType="BookLibDB.Status" Width="1.5" PointX="0.5" PointY="0.5" IsExpanded="true" FillColor="192, 255, 192" />
+        <EntityTypeShape EntityType="BookLibDB.History" Width="1.5" PointX="5" PointY="1.25" IsExpanded="true" FillColor="Black" />
         <AssociationConnector Association="BookLibDB.StatusBook" />
         <AssociationConnector Association="BookLibDB.BookTypeBook" />
         <AssociationConnector Association="BookLibDB.BookHistory" />
         <AssociationConnector Association="BookLibDB.UserHistory" />
+        <EntityTypeShape EntityType="BookLibDB.Role" Width="1.5" PointX="9.5" PointY="1.5" FillColor="255, 128, 128" />
+        <AssociationConnector Association="BookLibDB.RoleUser" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

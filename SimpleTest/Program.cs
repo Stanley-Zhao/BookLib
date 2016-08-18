@@ -7,24 +7,6 @@ using System.Linq;
 
 namespace SimpleTest
 {
-    public class A
-    {
-        public string ClassName { get; set; } = nameof(A);
-
-        public string PrintName()
-        {
-            return ClassName;
-        }
-    }
-
-    public class B : A
-    {
-        public B()
-        {
-            ClassName = nameof(B);
-        }
-    }
-
     class Program
     {
         static void Main(string[] args)
@@ -34,18 +16,16 @@ namespace SimpleTest
                 try
                 {
                     #region Test Read
-                    //var statusList = from c in container.Status								  
-                    //				  orderby c.Name
-                    //				  select new { c.Id, c.Name};
+                    var bookList = container.Books.ToList();
 
-                    ////string sql = "select [Name] from Status";
-                    ////var objList2 = container.Database.SqlQuery<string>(sql);
-                    //foreach (var item in statusList)
-                    //{
-                    //	Console.WriteLine(item);
-                    //}
+                    //string sql = "select [Name] from Status";
+                    //var objList2 = container.Database.SqlQuery<string>(sql);
+                    foreach (var item in bookList)
+                    {
+                        Console.WriteLine(item.ToString());
+                    }
 
-                    //Console.WriteLine(statusList.Count());
+                    Console.WriteLine(bookList.Count());
                     #endregion
 
                     #region Test Write
@@ -55,8 +35,8 @@ namespace SimpleTest
                     //int savedItems = container.SaveChanges();
                     #endregion
 
-                    B b = new B();
-                    Console.WriteLine(b.PrintName());
+                    #region Test Update
+                    #endregion
                 }
                 catch (DbUpdateException ex)
                 {
