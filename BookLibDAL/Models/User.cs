@@ -16,7 +16,7 @@ namespace BookLibDAL
             builder.AppendFormat("Name\t{0}\r\n", Name);
             builder.AppendFormat("Email\t{0}\r\n", Email);
             builder.AppendFormat("Role\t{0}\r\n", Role?.Name);
-            builder.AppendFormat("Histories ({0}):\r\n", Histories?.Count.ToString());
+            builder.AppendFormat("Hist.\t({0}):\r\n", Histories?.Count.ToString());
             foreach (History history in Histories)
             {
                 builder.AppendFormat("  Start - {0} | End - {1} | By {2}/{3}/{4}\r\n",

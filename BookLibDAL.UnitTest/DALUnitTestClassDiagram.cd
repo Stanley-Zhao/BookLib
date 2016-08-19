@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="BookLibDAL.UnitTest.UnitTestBase">
+    <Position X="1.25" Y="0.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Delegate Name="BookLibDAL.UnitTest.UnitTestBase.NoneParaDelegateMethod">
+        <TypeIdentifier>
+          <NewMemberFileName>UnitTestBase.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>QIAAAAEAgQAAAQIIgAQIAAAECAgAABEAAIABgEIEAAI=</HashCode>
+      <FileName>UnitTestBase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BookLibDAL.UnitTest.UnitTestBookLibDALBook">
+    <Position X="5.25" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAAAAAAAAAEAAAIAIAAAAAAAAAAAAEAAAAA=</HashCode>
+      <FileName>UnitTestBookLibDALBook.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BookLibDAL.UnitTest.UnitTestBookLibDALCommon">
+    <Position X="3.25" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAI=</HashCode>
+      <FileName>UnitTestBookLibDALCommon.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BookLibDAL.UnitTest.UnitTestBookLibDALUser">
+    <Position X="7.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gABAAAAAAAAAQAAAAAAAAAAAAAAAAAACAQAAAEAAAAA=</HashCode>
+      <FileName>UnitTestBookLibDALUser.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Microsoft YaHei UI" Size="9.75" />
+</ClassDiagram>

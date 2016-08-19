@@ -20,9 +20,9 @@ namespace BookLibDAL
                 builder.AppendFormat("  Start - {0} | End - {1} | By {2}/{3}/{4}\r\n",
                     history.StartTime.ToString(ConstantStrings.DATE_FORMAT),
                     history.ReturnTime.ToString(ConstantStrings.DATE_FORMAT),
-                    history.User.Role.Name,
-                    history.User.Name,
-                    history.User.Email
+                    history.User?.Role?.Name,
+                    history.User?.Name,
+                    history.User?.Email
                     );
             }
             builder.AppendLine("====");

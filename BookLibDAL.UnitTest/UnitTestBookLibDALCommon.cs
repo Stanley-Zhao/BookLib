@@ -1,64 +1,63 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 using System.Linq;
 
 namespace BookLibDAL.UnitTest
 {
-	[TestClass]
-	public class UnitTestBookLibDALCommon : UnitTestBase
-	{
+    [TestClass]
+    public class UnitTestBookLibDALCommon : UnitTestBase
+    {
         #region Test - Status (Test: Read)
         /// <summary>
         /// We only need read, this is a "ready-only" data in system
         /// </summary>
         [TestMethod]
-		public void TestReadStatus()
-		{
-            StartTest(nameof(TestReadStatus).ToString());
-
-            using (BookLibDAL.BookLibDBContainer container = new BookLibDAL.BookLibDBContainer())
-			{
-				var statusList = from c in container.Status
-								 orderby c.Name
-								 select new { c.Id, c.Name };
-
-				Assert.AreEqual(2, statusList.Count());
-
-				var statuses = statusList.ToList();
-
-				Assert.AreEqual("Lending", statuses[0].Name);
-				Assert.AreEqual("Ready", statuses[1].Name);
-			}
-
-            EndTest(nameof(TestReadStatus).ToString());
+        public void TestReadStatus()
+        {
+            DoTest(nameof(TestReadStatus), new NoneParaDelegateMethod
+                (
+                    () =>
+                    {
+                        using (BookLibDBContainer container = new BookLibDBContainer())
+                        {
+                            var statuses = (from c in container.Status
+                                            orderby c.Name
+                                            select new { c.Id, c.Name });
+                            Assert.AreEqual(2, statuses.Count());
+                            PrintEntityList<Status>(statuses); // print log
+                            var list = statuses.ToList();
+                            Assert.AreEqual("Lending", list[0].Name);
+                            Assert.AreEqual("Ready", list[1].Name);
+                        }
+                    }
+                ));
         }
-		#endregion
+        #endregion
 
-		#region Test - BookType (Test: Read)
-		/// <summary>
-		/// We only need read, this is a "ready-only" data in system
-		/// </summary>
-		[TestMethod]
-		public void TestReadBookType()
-		{
-            StartTest(nameof(TestReadBookType).ToString());
-
-            using (BookLibDAL.BookLibDBContainer container = new BookLibDAL.BookLibDBContainer())
-			{
-				var bookTypeList = from c in container.BookTypes
-								 orderby c.Name
-								 select new { c.Id, c.Name };
-
-				Assert.AreEqual(3, bookTypeList.Count());
-
-				var bookTypes = bookTypeList.ToList();
-
-				Assert.AreEqual("English", bookTypes[0].Name);
-				Assert.AreEqual("Management", bookTypes[1].Name);
-				Assert.AreEqual("Program", bookTypes[2].Name);
-			}
-
-            EndTest(nameof(TestReadBookType).ToString());
+        #region Test - BookType (Test: Read)
+        /// <summary>
+        /// We only need read, this is a "ready-only" data in system
+        /// </summary>
+        [TestMethod]
+        public void TestReadBookType()
+        {
+            DoTest(nameof(TestReadBookType), new NoneParaDelegateMethod
+                (
+                    () =>
+                    {
+                        using (BookLibDBContainer container = new BookLibDBContainer())
+                        {
+                            var bookTypes = (from c in container.BookTypes
+                                                orderby c.Name
+                                                select new { c.Id, c.Name });
+                            Assert.AreEqual(3, bookTypes.Count());
+                            PrintEntityList<BookType>(bookTypes); // print log
+                            var list = bookTypes.ToList();
+                            Assert.AreEqual("English", list[0].Name);
+                            Assert.AreEqual("Management", list[1].Name);
+                            Assert.AreEqual("Program", list[2].Name);
+                        }
+                    }
+                ));
         }
         #endregion
 
@@ -69,23 +68,22 @@ namespace BookLibDAL.UnitTest
 		[TestMethod]
         public void TestReadRole()
         {
-            StartTest(nameof(TestReadRole).ToString());
-
-            using (BookLibDAL.BookLibDBContainer container = new BookLibDAL.BookLibDBContainer())
-            {
-                var roleList = from c in container.Roles
-                                   orderby c.Name
-                                   select new { c.Id, c.Name };
-
-                Assert.AreEqual(2, roleList.Count());
-
-                var bookTypes = roleList.ToList();
-
-                Assert.AreEqual("Admin", bookTypes[0].Name);
-                Assert.AreEqual("User", bookTypes[1].Name);
-            }
-
-            EndTest(nameof(TestReadRole).ToString());
+            DoTest(nameof(TestReadRole), new NoneParaDelegateMethod
+                (
+                    () =>
+                    {
+                        using (BookLibDBContainer container = new BookLibDBContainer())
+                        {
+                            var roles = (from c in container.Roles
+                                         orderby c.Name
+                                         select new { c.Id, c.Name });
+                            Assert.AreEqual(2, roles.Count());
+                            PrintEntityList<Role>(roles); // print log
+                            Assert.AreEqual("Admin", roles.ToList()[0].Name);
+                            Assert.AreEqual("User", roles.ToList()[1].Name);
+                        }
+                    }
+                ));
         }
         #endregion
     }

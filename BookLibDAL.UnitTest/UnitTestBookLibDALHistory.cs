@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Data.Entity.Infrastructure;
+using System.Linq;
 
 namespace BookLibDAL.UnitTest
 {
     [TestClass]
-    public class UnitTestBookLibDALUser : UnitTestBase
+    public class UnitTestBookLibDALHistory : UnitTestBase
     {
         #region CleanUp for testing method
         /// <summary>
@@ -23,6 +22,7 @@ namespace BookLibDAL.UnitTest
                         using (BookLibDBContainer container = new BookLibDBContainer())
                         {
                             container.Histories.RemoveRange(container.Histories);
+                            container.Books.RemoveRange(container.Books);
                             container.Users.RemoveRange(container.Users.Where(x => x.Id > 1).ToList()); // Id=1, the root admin user
                             container.SaveChanges();
                         }
@@ -31,14 +31,14 @@ namespace BookLibDAL.UnitTest
         }
         #endregion
 
-        #region Test - User (Test: Create / Delete / Read and Update -> CRUD)
+        #region Test - History (Test: Create / Delete / Read and Update -> CRUD)
         /// <summary>
-        /// Create a duplicate user in system (user2, test@advent_test.com), this time, there will be an error from DB say user email is not allowed to be duplicated.
+        /// Create a new history in system (user1, book1, 2016-09-01 to 2016-09-30)
         /// </summary>
         [TestMethod]
-        public void TestCreateDuplicateUser()
+        public void TestCreateHistory()
         {
-            DoTest(nameof(TestCreateDuplicateUser), new NoneParaDelegateMethod
+            DoTest(nameof(TestCreateHistory), new NoneParaDelegateMethod
                 (
                     () =>
                     {
@@ -46,56 +46,21 @@ namespace BookLibDAL.UnitTest
                         {
                             try
                             {
-                                // prepare testing data - create user1
-                                CreateUser(container);
-                                var usersList = from c in container.Users
-                                                orderby c.Id
-                                                select new { c.Id, c.Name, c.Email };
-                                Assert.AreEqual(2, usersList.Count());
-                                User newUser = new User() { Name = "user2", Email = "test@advent_test.com" };
-                                container.Users.Add(newUser);
+                                CreateBook(container);
+                                User user = container.Users.Where(x => x.Id == 1).FirstOrDefault() as User;
+                                Book book = container.Books.Where(x => x.Name == "book1").FirstOrDefault() as Book;
+                                History history = new History()
+                                {
+                                    BookId = book.Id,
+                                    UserId = user.Id,
+                                    StartTime = Convert.ToDateTime("2016-09-01"),
+                                    ReturnTime = Convert.ToDateTime("2016-09-30")
+                                };
+                                container.Histories.Add(history);
                                 int savedItemsCount = container.SaveChanges();
-                                if (savedItemsCount == 1)
-                                {
-                                    Assert.Fail("Supposed to get exception from Database but not");
-                                }
-                            }
-                            catch (Exception ex)
-                            {
-                                if (!(ex is DbUpdateException))
-                                {
-                                    Assert.Fail("Supposed to get DbUpdateException from Database but not");
-                                }
-                                else
-                                {
-                                    Info("Get DbUpdateException, which is expected result");
-                                }
-                            }
-                        }
-                    }
-                ));
-        }
-
-        /// <summary>
-        /// Create a new user in system (user1, test@advent_test.com)
-        /// </summary>
-        [TestMethod]
-        public void TestCreateUser()
-        {
-            DoTest(nameof(TestCreateUser), new NoneParaDelegateMethod
-                (
-                    () =>
-                    {
-                        using (BookLibDBContainer container = new BookLibDBContainer())
-                        {
-                            try
-                            {
-                                var usersList = from c in container.Users
-                                                orderby c.Id
-                                                select new { c.Id, c.Name, c.Email };
-                                Assert.AreEqual(1, usersList.Count()); // there's a root admin user in DB as seed data
-                                int savedItemsCount = CreateUser(container);
                                 Assert.AreEqual(1, savedItemsCount);
+                                PrintEntity<Book>("book1"); // print log for histories
+                                Assert.AreEqual(2, container.Histories.Count());
                             }
                             catch (Exception ex)
                             {
@@ -108,14 +73,14 @@ namespace BookLibDAL.UnitTest
         /// <summary>
         /// Delete user from system (user2)
         /// </summary>
-        [TestMethod]
-        public void TestDeleteUser()
+        //[TestMethod]
+        public void TestDeleteHistory()
         {
-            DoTest(nameof(TestDeleteUser), new NoneParaDelegateMethod
+            DoTest(nameof(TestDeleteHistory), new NoneParaDelegateMethod
                 (
                     () =>
                     {
-                        using (BookLibDBContainer container = new BookLibDBContainer())
+                        using (BookLibDAL.BookLibDBContainer container = new BookLibDAL.BookLibDBContainer())
                         {
                             // prepare testing data - create user1
                             CreateUser(container);
@@ -138,14 +103,14 @@ namespace BookLibDAL.UnitTest
         /// <summary>
         /// Read new user from system (user1)
         /// </summary>
-        [TestMethod]
-        public void TestReadUser()
+        //[TestMethod]
+        public void TestReadHistory()
         {
-            DoTest(nameof(TestReadUser), new NoneParaDelegateMethod
+            DoTest(nameof(TestReadHistory), new NoneParaDelegateMethod
                 (
                     () =>
                     {
-                        using (BookLibDBContainer container = new BookLibDBContainer())
+                        using (BookLibDAL.BookLibDBContainer container = new BookLibDAL.BookLibDBContainer())
                         {
                             // prepare testing data - create user1
                             CreateUser(container);
@@ -165,14 +130,14 @@ namespace BookLibDAL.UnitTest
         /// <summary>
         /// Update new user from system (user1 -> user2)
         /// </summary>
-        [TestMethod]
-        public void TestUpdateUser()
+        //[TestMethod]
+        public void TestUpdateHistory()
         {
-            DoTest(nameof(TestUpdateUser), new NoneParaDelegateMethod
+            DoTest(nameof(TestUpdateHistory), new NoneParaDelegateMethod
                 (
                     () =>
                     {
-                        using (BookLibDBContainer container = new BookLibDBContainer())
+                        using (BookLibDAL.BookLibDBContainer container = new BookLibDAL.BookLibDBContainer())
                         {
                             // prepare testing data - create user1
                             CreateUser(container);

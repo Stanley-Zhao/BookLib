@@ -61,6 +61,7 @@
   <ItemGroup>
     <Compile Include="UnitTestBase.cs" />
     <Compile Include="UnitTestBookLibDALBook.cs" />
+    <Compile Include="UnitTestBookLibDALHistory.cs" />
     <Compile Include="UnitTestBookLibDALUser.cs" />
     <Compile Include="UnitTestBookLibDALCommon.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -75,6 +76,7 @@
     <None Include="..\BookLibDAL\App.config">
       <Link>App.config</Link>
     </None>
+    <None Include="DALUnitTestClassDiagram.cd" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
