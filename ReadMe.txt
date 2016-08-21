@@ -16,4 +16,4 @@ Setup Development Environment:
 
 ****************************************************************************************
 
-!!! EDMX project is useless for deployement, it's only for using desiner of Entity Framework !!!
+!!! EDMX project is useless for deployement, it's only for using designer of Entity Framework !!!
