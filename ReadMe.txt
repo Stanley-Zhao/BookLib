@@ -15,3 +15,5 @@ Setup Development Environment:
 2. update "BookLibDAL\App.config", provide your Database connection information.
 
 ****************************************************************************************
+
+!!! EDMX project is useless for deployement, it's only for using desiner of Entity Framework !!!

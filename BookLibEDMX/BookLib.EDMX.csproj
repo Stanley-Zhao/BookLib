@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{EA7C1D13-89EC-4514-92C4-8E6078F9153E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>BookLib.DataModel</RootNamespace>
+    <AssemblyName>EDMX</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\BookLibDataAccessLayer\Book.cs">
+      <Link>Book.cs</Link>
+    </Compile>
+    <Compile Include="..\BookLibDataAccessLayer\BookLibDB.Context.cs">
+      <Link>BookLibDB.Context.cs</Link>
+    </Compile>
+    <Compile Include="..\BookLibDataAccessLayer\BookLibDB.Context1.cs">
+      <Link>BookLibDB.Context1.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BookLibDB.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="..\BookLibDataAccessLayer\BookLibDB.cs">
+      <Link>BookLibDB.cs</Link>
+    </Compile>
+    <Compile Include="..\BookLibDataAccessLayer\BookLibDB.Designer.cs">
+      <Link>BookLibDB.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\BookLibDataAccessLayer\BookLibDB1.cs">
+      <Link>BookLibDB1.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BookLibDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="..\BookLibDataAccessLayer\BookLibDB1.Designer.cs">
+      <Link>BookLibDB1.Designer.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BookLibDB.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="..\BookLibDataAccessLayer\BookType.cs">
+      <Link>BookType.cs</Link>
+    </Compile>
+    <Compile Include="..\BookLibDataAccessLayer\History.cs">
+      <Link>History.cs</Link>
+    </Compile>
+    <Compile Include="..\BookLibDataAccessLayer\Role.cs">
+      <Link>Role.cs</Link>
+    </Compile>
+    <Compile Include="..\BookLibDataAccessLayer\Status.cs">
+      <Link>Status.cs</Link>
+    </Compile>
+    <Compile Include="..\BookLibDataAccessLayer\User.cs">
+      <Link>User.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\BookLibDataAccessLayer\BookLibDB.Context.tt">
+      <Link>BookLibDB.Context.tt</Link>
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>BookLibDB.Context1.cs</LastGenOutput>
+    </Content>
+    <Content Include="..\BookLibDataAccessLayer\BookLibDB.edmx.sql">
+      <Link>BookLibDB.edmx.sql</Link>
+    </Content>
+    <Content Include="..\BookLibDataAccessLayer\BookLibDB.tt">
+      <Link>BookLibDB.tt</Link>
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>BookLibDB1.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <EntityDeploy Include="..\BookLibDataAccessLayer\BookLibDB.edmx">
+      <Link>BookLibDB.edmx</Link>
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>BookLibDB1.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="..\BookLibDataAccessLayer\BookLibDB.edmx.diagram">
+      <Link>BookLibDB.edmx.diagram</Link>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
