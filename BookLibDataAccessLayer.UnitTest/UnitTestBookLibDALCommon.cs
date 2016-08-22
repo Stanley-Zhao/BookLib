@@ -24,11 +24,12 @@ namespace BookLibDAL.UnitTest
                             var statuses = (from c in container.Status
                                             orderby c.Name
                                             select new { c.Id, c.Name });
-                            Assert.AreEqual(2, statuses.Count());
+                            Assert.AreEqual(3, statuses.Count());
                             PrintEntityList<Status>(statuses); // print log
                             var list = statuses.ToList();
                             Assert.AreEqual("Lending", list[0].Name);
                             Assert.AreEqual("Ready", list[1].Name);
+                            Assert.AreEqual("Removed", list[2].Name);
                         }
                     }
                 ));

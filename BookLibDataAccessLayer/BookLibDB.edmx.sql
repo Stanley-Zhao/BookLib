@@ -282,6 +282,7 @@ GO
 -- Status
 INSERT INTO dbo.Status(Name) VALUES (N'Lending')
 INSERT INTO dbo.Status(Name) VALUES (N'Ready')
+INSERT INTO dbo.Status(Name) VALUES (N'Removed')
 GO
 
 -- Role

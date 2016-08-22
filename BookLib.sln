@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookLib.Business", "BookLib
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookLib.DataModel", "BookLibDataModel\BookLib.DataModel.csproj", "{6433FAE6-7D38-46B0-9F2F-E0E22CBCCEFD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookLib.Business.Instance", "BookLibBusinessInstance\BookLib.Business.Instance.csproj", "{FAF896DD-754C-4181-8473-D5F55CB976F7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookLib.Interface", "BookLibInterface\BookLib.Interface.csproj", "{FAF896DD-754C-4181-8473-D5F55CB976F7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookLib.Common", "BookLibCommon\BookLib.Common.csproj", "{150E3EB1-B4A7-41D3-8DED-074F7A27A7A3}"
 EndProject

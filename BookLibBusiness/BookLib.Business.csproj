@@ -45,11 +45,12 @@
   <ItemGroup>
     <Compile Include="BookLibBL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReturnValue.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BookLibBusinessInstance\BookLib.Business.Instance.csproj">
+    <ProjectReference Include="..\BookLibInterface\BookLib.Interface.csproj">
       <Project>{faf896dd-754c-4181-8473-d5f55cb976f7}</Project>
-      <Name>BookLib.Business.Instance</Name>
+      <Name>BookLib.Instance</Name>
     </ProjectReference>
     <ProjectReference Include="..\BookLibDataAccessLayer\BookLib.DataAccessLayer.csproj">
       <Project>{0667580f-8088-4040-a291-de43ca8b5257}</Project>
