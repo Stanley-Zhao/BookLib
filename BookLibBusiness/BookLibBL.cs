@@ -1,5 +1,7 @@
-﻿using BookLib.DataAccessLayer;
+﻿using BookLib.Common;
+using BookLib.DataAccessLayer;
 using BookLib.DataModel;
+using BookLib.Delegates;
 using BookLib.Interface;
 using Business.Common;
 using System;
@@ -31,26 +33,75 @@ namespace BookLib.Business
         }
         #endregion
 
+        #region Helping Methods
+        private IReturnValue<T> DoTask<T>(DoBusinessTaskDelegateMethod<T> method, string methodName)
+        {
+            IReturnValue<T> returnValue = new ReturnValue<T>();
+
+            try
+            {
+                if (method == null)
+                    method = new DoBusinessTaskDelegateMethod<T>
+                        (
+                            (r) =>
+                            {
+                                throw new NotImplementedException(methodName); // do real work here
+                            }
+                        );
+
+                returnValue.StatusCode = (int)method.DynamicInvoke();
+            }
+            catch (Exception ex)
+            {
+                returnValue.HasError = true;
+                returnValue.StatusCode = StatusCode.UNKNOWN;
+                returnValue.DetailMessage = methodName + Environment.NewLine + ex.ToString();
+                returnValue.Message = methodName + ":" + ex.Message;
+            }
+
+            return returnValue;
+        }
+        #endregion
+
         #region Status and BookTypes
         public IReturnValue<BookType> GetAllBookTypes()
         {
-            throw new NotImplementedException();
+            return DoTask<BookType>
+                (
+                    new DoBusinessTaskDelegateMethod<BookType>(
+                        (r) =>
+                        {
+                            using (BookLibDBContainer container = new BookLibDBContainer())
+                            {
+                                var bookTypes = (from s in container.BookTypes
+                                                 select new { s.Id, s.Name });
+                                List<BookType> list = Utility.ConvertAnonymousTypeList<BookType>(bookTypes) as List<BookType>;
+                                r.SingleEntity = false;
+                                r.ReturnEntities = list.ToArray();
+                                return StatusCode.OK;
+                            }
+                        }
+                ), nameof(GetAllBookTypes));
         }
 
         public IReturnValue<Status> GetAllStatus()
         {
-            IReturnValue<Status> returnValue = new ReturnValue<Status>();
-
-            using (BookLibDBContainer container = new BookLibDBContainer())
-            {
-                var status = (from s in container.Status
-                              select new { s.Id, s.Name });
-                List<Status> list = Utility.ConvertAnonymousTypeList<Status>(status) as List<Status>;
-                returnValue.SingleEntity = false;
-                returnValue.ReturnEntities = list.ToArray();
-            }
-
-            return returnValue;            
+            return DoTask<Status>
+                (
+                    new DoBusinessTaskDelegateMethod<Status>(
+                        (r) =>
+                        {
+                            using (BookLibDBContainer container = new BookLibDBContainer())
+                            {
+                                var status = (from s in container.Status
+                                              select new { s.Id, s.Name });
+                                List<Status> list = Utility.ConvertAnonymousTypeList<Status>(status) as List<Status>;
+                                r.SingleEntity = false;
+                                r.ReturnEntities = list.ToArray();
+                                return StatusCode.OK;
+                            }
+                        }
+                ), nameof(GetAllStatus));
         }
         #endregion
 

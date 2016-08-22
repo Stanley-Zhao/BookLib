@@ -1,5 +1,7 @@
 ﻿using BookLib.DataAccessLayer;
 using BookLib.DataModel;
+using BookLib.Delegates;
+using Business.Common;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 

@@ -1,4 +1,5 @@
-﻿using BookLib.DataAccessLayer;
+﻿using BookLib.Common;
+using BookLib.DataAccessLayer;
 using BookLib.DataModel;
 using System;
 using System.Collections.Generic;
@@ -6,6 +7,7 @@ using System.Data.Entity.Core;
 using System.Data.Entity.Infrastructure;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading;
 
 namespace SimpleTest
 {
@@ -78,25 +80,36 @@ namespace SimpleTest
                     #endregion
 
                     #region Test Write
-                    Role role = GetRole("User");
-                    string email = string.Format("{0}@advent_test.com", DateTime.Now.Ticks.ToString());
-                    User newUser = new User() { Name = "user1", Email = email,
-                        RoleId = role.Id };
+                    //Role role = GetRole("User");
+                    //string email = string.Format("{0}@advent_test.com", DateTime.Now.Ticks.ToString());
+                    //User newUser = new User() { Name = "user1", Email = email,
+                    //    RoleId = role.Id };
 
-                    container.Users.Add(newUser);
-                    int savedItemsCount = container.SaveChanges();
-                                       
-                    var users = (from c in container.Users
-                                        orderby c.Id
-                                        where c.Email == email
-                                        select new { c.Id, c.Name, c.Email, c.RoleId, c.Role, c.Histories }).ToArray();
+                    //container.Users.Add(newUser);
+                    //int savedItemsCount = container.SaveChanges();
 
-                    List<User> userList = ConvertAnonymousType<User>(users) as List<User>;
+                    //var users = (from c in container.Users
+                    //                    orderby c.Id
+                    //                    where c.Email == email
+                    //                    select new { c.Id, c.Name, c.Email, c.RoleId, c.Role, c.Histories }).ToArray();
 
-                    Console.WriteLine(string.Format("Create testing user:\r\n{0}", userList?.Count==1? userList[0].ToString():string.Empty));
+                    //List<User> userList = ConvertAnonymousType<User>(users) as List<User>;
+
+                    //Console.WriteLine(string.Format("Create testing user:\r\n{0}", userList?.Count==1? userList[0].ToString():string.Empty));
                     #endregion
 
                     #region Test Update
+                    #endregion
+
+                    #region Test Resource file
+                    Console.WriteLine("Test");
+                    string valueFromResrouce = BookLib.Resource.BookLibResourceManager.Instance.GetString("Status_OK");
+                    Console.WriteLine(valueFromResrouce);
+                    BookLib.Resource.BookLibResourceManager.Instance.SetCultureInfo(new System.Globalization.CultureInfo("zh-CHS"));
+                    //Thread.CurrentThread.CurrentCulture = ;
+                    valueFromResrouce = BookLib.Resource.BookLibResourceManager.Instance.GetString("Status_OK");
+                    Console.WriteLine(valueFromResrouce);
+                    Console.WriteLine("测试");
                     #endregion
                 }
                 catch (DbUpdateException ex)

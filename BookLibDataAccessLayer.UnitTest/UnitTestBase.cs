@@ -1,5 +1,6 @@
 ﻿using BookLib.DataAccessLayer;
 using BookLib.DataModel;
+using BookLib.Delegates;
 using Business.Common;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -10,10 +11,6 @@ namespace BookLibDAL.UnitTest
 {
     public class UnitTestBase
     {
-        #region Delegates
-        protected delegate void NoneParaDelegateMethod();
-        #endregion
-
         #region Hard-code strings
         protected string BookType_English { get; } = "English";
         protected string BookType_Management { get; } = "Management";

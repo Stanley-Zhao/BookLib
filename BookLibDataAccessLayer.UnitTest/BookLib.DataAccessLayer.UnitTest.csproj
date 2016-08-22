@@ -79,6 +79,10 @@
       <Project>{150e3eb1-b4a7-41d3-8ded-074f7a27a7a3}</Project>
       <Name>BookLib.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\BookLibDelegates\BookLib.Delegates.csproj">
+      <Project>{34b75dcb-6989-4b80-a7d2-42d0cbe171ff}</Project>
+      <Name>BookLib.Delegates</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\BookLibDataAccessLayer\App.config">

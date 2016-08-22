@@ -53,6 +53,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BookLibCommon\BookLib.Common.csproj">
+      <Project>{150e3eb1-b4a7-41d3-8ded-074f7a27a7a3}</Project>
+      <Name>BookLib.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\BookLibDataAccessLayer\BookLib.DataAccessLayer.csproj">
       <Project>{0667580f-8088-4040-a291-de43ca8b5257}</Project>
       <Name>BookLib.DataAccessLayer</Name>
@@ -60,6 +64,10 @@
     <ProjectReference Include="..\BookLibDataModel\BookLib.DataModel.csproj">
       <Project>{6433fae6-7d38-46b0-9f2f-e0e22cbccefd}</Project>
       <Name>BookLib.DataModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BookLibResource\BookLib.Resource.csproj">
+      <Project>{b226af1a-c6cd-4df3-8fa6-d9383af9ad26}</Project>
+      <Name>BookLib.Resource</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
