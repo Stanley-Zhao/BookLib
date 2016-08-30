@@ -117,10 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Status_Error_Unknown" xml:space="preserve">
+  <data name="STATUS_ERROR_EMPTY_LIST" xml:space="preserve">
+    <value>发现空列表</value>
+  </data>
+  <data name="STATUS_ERROR_NOT_FOUND" xml:space="preserve">
+    <value>未找到匹配记录</value>
+  </data>
+  <data name="STATUS_ERROR_UNKNOWN" xml:space="preserve">
     <value>未知错误</value>
   </data>
-  <data name="Status_OK" xml:space="preserve">
+  <data name="STATUS_OK" xml:space="preserve">
     <value>成功</value>
   </data>
 </root>

@@ -1,6 +1,7 @@
 ﻿using BookLib.Common;
 using BookLib.DataAccessLayer;
 using BookLib.DataModel;
+using BookLib.Resource;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Core;
@@ -63,8 +64,8 @@ namespace SimpleTest
                     #region Test Read
                     //var bookList = container.Books.ToList();
 
-                    ////string sql = "select [Name] from Status";
-                    ////var objList2 = container.Database.SqlQuery<string>(sql);
+                    //string sql = "select [Name] from Status";
+                    //var objList2 = container.Database.SqlQuery<string>(sql);
                     //foreach (var item in bookList)
                     //{
                     //    Console.WriteLine(item.ToString());
@@ -77,6 +78,11 @@ namespace SimpleTest
                     //{
                     //    Console.WriteLine(item2.ToString());
                     //}
+
+                    var status = (from u in container.Users
+                                  where u.Email.ToLower().Trim() == "szhao"
+                                  select new { u.Id, u.Name, u.Email, u.Role, u.RoleId }).SingleOrDefault();
+                    Console.WriteLine(status);
                     #endregion
 
                     #region Test Write
@@ -102,14 +108,13 @@ namespace SimpleTest
                     #endregion
 
                     #region Test Resource file
-                    Console.WriteLine("Test");
-                    string valueFromResrouce = BookLib.Resource.BookLibResourceManager.Instance.GetString("Status_OK");
-                    Console.WriteLine(valueFromResrouce);
-                    BookLib.Resource.BookLibResourceManager.Instance.SetCultureInfo(new System.Globalization.CultureInfo("zh-CHS"));
-                    //Thread.CurrentThread.CurrentCulture = ;
-                    valueFromResrouce = BookLib.Resource.BookLibResourceManager.Instance.GetString("Status_OK");
-                    Console.WriteLine(valueFromResrouce);
-                    Console.WriteLine("测试");
+                    //Console.WriteLine("Test");
+                    //Console.WriteLine(BookLibResourceManager.Instance.GetString(nameof(BookLibStatusCode.STATUS_OK)));
+                    //Console.WriteLine(BookLibResourceManager.Instance.GetString(nameof(BookLibStatusCode.STATUS_ERROR_UNKNOWN)));
+                    //BookLibResourceManager.Instance.SetCultureInfo(new System.Globalization.CultureInfo("zh-CHS"));
+                    //Console.WriteLine("测试");
+                    //Console.WriteLine(BookLibResourceManager.Instance.GetString(nameof(BookLibStatusCode.STATUS_OK)));
+                    //Console.WriteLine(BookLibResourceManager.Instance.GetString(nameof(BookLibStatusCode.STATUS_ERROR_UNKNOWN)));
                     #endregion
                 }
                 catch (DbUpdateException ex)

@@ -50,16 +50,68 @@ namespace BookLib.Business
                         );
 
                 returnValue.StatusCode = (int)method.DynamicInvoke();
+
+                if(returnValue.StatusCode != BookLibStatusCode.STATUS_OK) // something wrong, get expected error message
+                {                    
+                    returnValue.Message = methodName + ":" + BookLibStatusCode.GetStatusMessage(returnValue.StatusCode);
+                    returnValue.DetailMessage = methodName + Environment.NewLine + BookLibStatusCode.GetStatusMessage(returnValue.StatusCode);
+                }
             }
             catch (Exception ex)
             {
                 returnValue.HasError = true;
-                returnValue.StatusCode = StatusCode.UNKNOWN;
+                returnValue.StatusCode = BookLibStatusCode.STATUS_ERROR_UNKNOWN;
                 returnValue.DetailMessage = methodName + Environment.NewLine + ex.ToString();
-                returnValue.Message = methodName + ":" + ex.Message;
+                returnValue.Message = methodName + ":" + BookLibStatusCode.GetStatusMessage(BookLibStatusCode.STATUS_ERROR_UNKNOWN);
             }
 
             return returnValue;
+        }
+
+        private int HandelSingleEntity<T>(ref IReturnValue<T> r, object objs)
+        {
+            r.SingleEntity = true;
+            if (null != objs)
+            {
+                T user = Utility.ConvertAnonymousType<T>(objs);
+                r.ReturnEntity = user;
+                return BookLibStatusCode.STATUS_OK;
+            }
+            else
+            {
+                r.ReturnEntity = default(T);
+                return BookLibStatusCode.STATUS_ERROR_NOT_FOUND;
+            }
+        }
+
+        private int HandleEntitiesList<T>(ref IReturnValue<T> r, object objs, bool allowEmptyList = true)
+        {
+            r.SingleEntity = false;
+            List<T> objects = null;
+
+            if (null != objs)            
+                objects = Utility.ConvertAnonymousTypeList<T>(objs as IEnumerable<object>) as List<T>;            
+
+            if (null == objects && allowEmptyList)
+            {
+                r.ReturnEntities = null;
+                r.Message = BookLibStatusCode.GetStatusMessage(BookLibStatusCode.STATUS_OK);
+                return BookLibStatusCode.STATUS_OK;
+            }
+            else if(null != objects)
+            {
+                r.ReturnEntities = objects.ToArray();
+                r.AffectEntitiesCount = objects.Count();
+                r.Message = BookLibStatusCode.GetStatusMessage(BookLibStatusCode.STATUS_OK);
+                return BookLibStatusCode.STATUS_OK;
+            }
+            else
+            {
+                r.ReturnEntities = null;
+                r.AffectEntitiesCount = 0;
+                r.Message = BookLibStatusCode.GetStatusMessage(BookLibStatusCode.STATUS_ERROR_EMPTY_LIST);
+                return BookLibStatusCode.STATUS_ERROR_EMPTY_LIST;
+            }
         }
         #endregion
 
@@ -73,12 +125,10 @@ namespace BookLib.Business
                         {
                             using (BookLibDBContainer container = new BookLibDBContainer())
                             {
-                                var bookTypes = (from s in container.BookTypes
-                                                 select new { s.Id, s.Name });
-                                List<BookType> list = Utility.ConvertAnonymousTypeList<BookType>(bookTypes) as List<BookType>;
-                                r.SingleEntity = false;
-                                r.ReturnEntities = list.ToArray();
-                                return StatusCode.OK;
+                                var bookTypes = (from b in container.BookTypes
+                                                 select new { b.Id, b.Name });
+
+                                return HandleEntitiesList<BookType>(ref r, bookTypes, false);                                
                             }
                         }
                 ), nameof(GetAllBookTypes));
@@ -95,10 +145,8 @@ namespace BookLib.Business
                             {
                                 var status = (from s in container.Status
                                               select new { s.Id, s.Name });
-                                List<Status> list = Utility.ConvertAnonymousTypeList<Status>(status) as List<Status>;
-                                r.SingleEntity = false;
-                                r.ReturnEntities = list.ToArray();
-                                return StatusCode.OK;
+
+                                return HandleEntitiesList<Status>(ref r, status, false);
                             }
                         }
                 ), nameof(GetAllStatus));
@@ -108,88 +156,174 @@ namespace BookLib.Business
         #region Users
         public IReturnValue<User> GetAllUsers()
         {
-            throw new NotImplementedException();
+            return DoTask<User>
+                (
+                    new DoBusinessTaskDelegateMethod<User>(
+                        (r) =>
+                        {
+                            using (BookLibDBContainer container = new BookLibDBContainer())
+                            {
+                                var users = (from u in container.Users
+                                              select new { u.Id, u.Name, u.Email, u.Role, u.RoleId });
+
+                                return HandleEntitiesList<User>(ref r, users, false);
+                            }
+                        }
+                ), nameof(GetAllUsers));
         }
 
         public IReturnValue<User> GetUserByEmail(string email)
         {
-            throw new NotImplementedException();
+            return DoTask<User>
+                (
+                    new DoBusinessTaskDelegateMethod<User>(
+                        (r) =>
+                        {
+                            using (BookLibDBContainer container = new BookLibDBContainer())
+                            {
+                                var users = (from u in container.Users
+                                              where u.Email.ToLower().Trim() == email.ToLower().Trim()
+                                              select new { u.Id, u.Name, u.Email, u.Role, u.RoleId }).SingleOrDefault();
+
+                                return HandelSingleEntity<User>(ref r, users);
+                            }
+                        }
+                ), nameof(GetUserByEmail));
         }
 
         public IReturnValue<User> GetUserById(int id)
         {
-            throw new NotImplementedException();
+            return DoTask<User>
+                (
+                    new DoBusinessTaskDelegateMethod<User>(
+                        (r) =>
+                        {
+                            using (BookLibDBContainer container = new BookLibDBContainer())
+                            {
+                                var users = (from u in container.Users
+                                              where u.Id == id
+                                              select new { u.Id, u.Name, u.Email, u.Role, u.RoleId }).SingleOrDefault();
+
+                                return HandelSingleEntity<User>(ref r, users);
+                            }
+                        }
+                ), nameof(GetUserById));
         }
 
         public IReturnValue<User> GetUserByName(string name)
         {
-            throw new NotImplementedException();
+            return DoTask<User>
+               (
+                   new DoBusinessTaskDelegateMethod<User>(
+                       (r) =>
+                       {
+                           using (BookLibDBContainer container = new BookLibDBContainer())
+                           {
+                               var users = (from u in container.Users
+                                             where u.Name.ToLower().Trim() == name.ToLower().Trim()
+                                             select new { u.Id, u.Name, u.Email, u.Role, u.RoleId }).SingleOrDefault();
+
+                               return HandelSingleEntity<User>(ref r, users);
+                           }
+                       }
+               ), nameof(GetUserByName));
         }
 
-        public IReturnValue<User> UpdateUserName(int userId, string name, string email)
+        public IReturnValue<User> UpdateUserByEmail(string email, string name, int roleId)
         {
-            throw new NotImplementedException();
+            return DoTask<User>
+               (
+                   new DoBusinessTaskDelegateMethod<User>(
+                       (r) =>
+                       {
+                           using (BookLibDBContainer container = new BookLibDBContainer())
+                           {
+                               User user = container.Users.Where(u => u.Email.ToLower().Trim() == email.ToLower().Trim()).FirstOrDefault() as User;
+
+                               if (null == user)
+                                   return BookLibStatusCode.STATUS_ERROR_NOT_FOUND;
+
+                               user.Name = name;
+                               user.RoleId = roleId;
+                               int updatedCount = container.SaveChanges();
+
+                               return BookLibStatusCode.STATUS_OK;
+                           }
+                       }
+               ), nameof(UpdateUserByEmail));
         }
         #endregion
 
         #region Books
         public IReturnValue<Book> AddANewBook(string name, string description, int bookTypeId)
         {
+            // TODO - AddANewBook
             throw new NotImplementedException();
         }
 
         public IReturnValue<Book> BorrowABook(string email, string bookName, DateTime startTime)
         {
+            // TODO - BorrowABook
             throw new NotImplementedException();
         }
 
         public IReturnValue<Book> DeleteABook(string name)
         {
+            // TODO - DeleteABook
             throw new NotImplementedException();
         }
 
         public IReturnValue<Book> GetAllBooks()
         {
+            // TODO - GetAllBooks
             throw new NotImplementedException();
         }
 
         public IReturnValue<Book> GetBookById(int id)
         {
+            // TODO - GetBookById
             throw new NotImplementedException();
         }
 
         public IReturnValue<Book> GetBookByName(string name)
         {
+            // TODO - GetBookByName
             throw new NotImplementedException();
         }
 
         public IReturnValue<Book> GetBooksByBookType(int bookTypeId)
         {
+            // TODO - GetBooksByBookType
             throw new NotImplementedException();
         }
 
         public IReturnValue<Book> GetBooksByStatus(int statusId)
         {
+            // TODO - GetBooksByStatus
             throw new NotImplementedException();
         }
 
         public IReturnValue<Book> ReturnABook(string bookName, DateTime returnTime)
         {
+            // TODO - ReturnABook
             throw new NotImplementedException();
         }
 
         public IReturnValue<Book> SearchBookByDescription(string keywords)
         {
+            // TODO - SearchBookByDescription
             throw new NotImplementedException();
         }
 
         public IReturnValue<Book> SearchBookByName(string startKeywords)
         {
+            // TODO - SearchBookByName
             throw new NotImplementedException();
         }
 
         public IReturnValue<Book> UpdateBookInfo(int bookId, string name, string description, int bookTypeId, int statusId)
         {
+            // TODO - UpdateBookInfo
             throw new NotImplementedException();
         }
         #endregion
@@ -197,31 +331,37 @@ namespace BookLib.Business
         #region Histories
         public IReturnValue<History> GetAllHistories()
         {
+            // TODO - GetAllHistories
             throw new NotImplementedException();
         }
 
         public IReturnValue<History> GetHistoriesByBookName(string bookName)
         {
+            // TODO - GetHistoriesByBookName
             throw new NotImplementedException();
         }
 
         public IReturnValue<History> GetHistoriesByBookName(string bookName, DateTime startTime, DateTime returnTime)
         {
+            // TODO - GetHistoriesByBookName
             throw new NotImplementedException();
         }
 
         public IReturnValue<History> GetHistoriesByUserEmail(string email)
         {
+            // TODO - GetHistoriesByUserEmail
             throw new NotImplementedException();
         }
 
         public IReturnValue<History> GetHistoriesByUserEmail(string email, DateTime startTime, DateTime returnTime)
         {
+            // TODO - GetHistoriesByUserEmail
             throw new NotImplementedException();
         }
 
         public IReturnValue<History> UpdateHistory()
         {
+            // TODO - UpdateHistory
             throw new NotImplementedException();
         }
         #endregion

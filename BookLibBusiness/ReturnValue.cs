@@ -1,4 +1,5 @@
-﻿using BookLib.Interface;
+﻿using System;
+using BookLib.Interface;
 
 namespace BookLib.Business
 {
@@ -12,10 +13,12 @@ namespace BookLib.Business
 
         public T[] ReturnEntities { get; set; } = null;
 
-        public int StatusCode { get; set; } = BookLib.Common.StatusCode.OK;
+        public int StatusCode { get; set; } = BookLib.Common.BookLibStatusCode.STATUS_OK;
 
         public T ReturnEntity { get; set; } = default(T);
 
         public bool SingleEntity { get; set; } = true;
+
+        public int AffectEntitiesCount { get; set; } = 0;
     }
 }

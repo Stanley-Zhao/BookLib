@@ -19,7 +19,7 @@ namespace BookLib.Interface
         IReturnValue<User> GetUserByEmail(string email);
         IReturnValue<User> GetUserById(int id);
         IReturnValue<User> GetUserByName(string name);
-        IReturnValue<User> UpdateUserName(int userId, string name, string email);
+        IReturnValue<User> UpdateUserByEmail(string email, string name, int roleId);
         #endregion
 
         #region Book

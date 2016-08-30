@@ -61,20 +61,38 @@ namespace BookLib.Resource {
         }
         
         /// <summary>
+        ///   查找类似 Empty List is found 的本地化字符串。
+        /// </summary>
+        internal static string STATUS_ERROR_EMPTY_LIST {
+            get {
+                return ResourceManager.GetString("STATUS_ERROR_EMPTY_LIST", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Not found 的本地化字符串。
+        /// </summary>
+        internal static string STATUS_ERROR_NOT_FOUND {
+            get {
+                return ResourceManager.GetString("STATUS_ERROR_NOT_FOUND", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Unknown Error 的本地化字符串。
         /// </summary>
-        internal static string Status_Error_Unknown {
+        internal static string STATUS_ERROR_UNKNOWN {
             get {
-                return ResourceManager.GetString("Status_Error_Unknown", resourceCulture);
+                return ResourceManager.GetString("STATUS_ERROR_UNKNOWN", resourceCulture);
             }
         }
         
         /// <summary>
         ///   查找类似 OK 的本地化字符串。
         /// </summary>
-        internal static string Status_OK {
+        internal static string STATUS_OK {
             get {
-                return ResourceManager.GetString("Status_OK", resourceCulture);
+                return ResourceManager.GetString("STATUS_OK", resourceCulture);
             }
         }
     }
